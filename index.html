@@ -166,9 +166,13 @@
   .filter-btn:hover, .filter-btn.active {
     background: rgba(0,242,255,0.1); border-color: var(--accent); color: var(--accent);
   }
+  .filter-btn[data-estado="Completado"]:hover,
   .filter-btn.active[data-estado="Completado"] { background:rgba(0,230,118,0.1);  border-color:#00e676; color:#00e676; }
+  .filter-btn[data-estado="Desarrollo"]:hover,
   .filter-btn.active[data-estado="Desarrollo"] { background:rgba(255,214,0,0.1);  border-color:#ffd600; color:#ffd600; }
+  .filter-btn[data-estado="Atrasado"]:hover,
   .filter-btn.active[data-estado="Atrasado"]   { background:rgba(255,82,82,0.1);  border-color:#ff5252; color:#ff5252; }
+  .filter-btn[data-estado="No aplica"]:hover,
   .filter-btn.active[data-estado="No aplica"]  { background:rgba(139,148,158,0.1);border-color:#8b949e; color:#8b949e; }
   table { width: 100%; border-collapse: collapse; }
   thead tr { background: var(--surface2); }
@@ -209,6 +213,7 @@
 
   /* ── Footer ── */
   #chartEstado { cursor: pointer; }
+  #chartEquipo { cursor: pointer; }
   #chartEstado + * .chartjs-legend,
   .chart-card:first-child .chartjs-size-monitor { overflow: visible; }
   /* Force donut legend single row */
@@ -419,14 +424,33 @@
     <div class="table-header">
       <div>
         <div class="chart-title">Detalle de Desafíos</div>
-        <div class="chart-sub">Filtrar por estado</div>
+        <div class="chart-sub">Filtrar por estado o buscar por nombre, equipo o líder</div>
       </div>
-      <div class="filter-row">
-        <button class="filter-btn active" data-estado="Todos"      onclick="filterTable('Todos', this)">Todos</button>
-        <button class="filter-btn"        data-estado="Completado" onclick="filterTable('Completado', this)">Completados</button>
-        <button class="filter-btn"        data-estado="Desarrollo" onclick="filterTable('Desarrollo', this)">En Desarrollo</button>
-        <button class="filter-btn"        data-estado="Atrasado"   onclick="filterTable('Atrasado', this)">Atrasados</button>
-        <button class="filter-btn"        data-estado="No aplica"  onclick="filterTable('No aplica', this)">No Aplica</button>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <button class="filter-btn active" data-estado="Todos" onclick="filterTable('Todos', this)">Todos</button>
+        <button class="filter-btn" data-estado="Completado" onclick="filterTable('Completado', this)" style="display:none">Completados</button>
+        <button class="filter-btn" data-estado="Desarrollo" onclick="filterTable('Desarrollo', this)" style="display:none">En Desarrollo</button>
+        <button class="filter-btn" data-estado="Atrasado"   onclick="filterTable('Atrasado', this)"   style="display:none">Atrasados</button>
+        <button class="filter-btn" data-estado="No aplica"  onclick="filterTable('No aplica', this)"  style="display:none">No Aplica</button>
+        <div style="width:1px; height:16px; background:var(--border); margin:0 2px;"></div>
+        <div style="position:relative; display:flex; align-items:center;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+            style="position:absolute; left:8px; pointer-events:none;"
+            stroke="#00f2ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          </svg>
+          <input type="text" id="searchInput"
+            oninput="applySearch(this.value)"
+            style="background:transparent; border:1px solid var(--border); border-radius:4px;
+                   color:var(--text); font-family:'Inter',sans-serif; font-size:11px;
+                   padding:5px 28px 5px 26px; width:160px; outline:none;
+                   letter-spacing:0.02em; transition: border-color 0.2s, width 0.3s;"
+            onfocus="this.style.borderColor='var(--accent)'; this.style.width='210px'"
+            onblur="this.style.borderColor='var(--border)'; if(!this.value) this.style.width='160px'">
+          <span id="searchCounter" style="position:absolute; right:7px;
+            font-size:10px; color:var(--accent); font-family:'Space Grotesk',sans-serif;
+            pointer-events:none;"></span>
+        </div>
       </div>
     </div>
     <div style="overflow-x:auto">
@@ -454,7 +478,7 @@
 </div>
 
 <script>
-const DATA = [{"codigo": "D26-20", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "Restructurar Proceso de parchado, disminuir HH en procesos de actualización.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-21", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de virtual patch, para aumentar cobertura de servidores producción con el fin de disminuir cantidad de mantenciones de servidores de producción debido a vulnerabilidades que deben ser mitigadas mediante parches de actualización.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-22", "equipo": "Equipo MET", "lider": "Luis Caris", "nombre": "Disminuir tiempo de generación de entregables de auditorias del gestión", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-23", "equipo": "Arquitectura", "lider": "Luis Sanzana", "nombre": "Evaluación Github Copilot", "estado": "Completado", "gerencia": "Procesos de Inversiones", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-24", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "nombre": "Implementar una nueva metodología de medición de productividad y control de desarrollo", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-38", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "nombre": "Democratización IA en equipos usuarios, prueba piloto", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "avance_enero": 60, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-39", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "nombre": "Democratización IA en equipos usuarios, herramienta definitiva", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "avance_enero": 20, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-150", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Renovación de nuevos firewalls de borde con equipos carrier class que nos ofrece un 200% más de potencia y adicionalmente permite virtualización de firewall.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-151", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de telefonia para migrar el cisco call manager, adicionalmente que ofresca omnicalidad de comunicación como son whatsapp", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-152", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de correo electrónico que permitan mejorar la seguridad, administración y gestión del correo interno.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-153", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Aumento de capacidad de Storages sites Lidice y Panamericana.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-154", "equipo": "Transversales", "lider": "Jovan Lausic", "nombre": "Migración Chronus 2.0", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-155", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "nombre": "Panel Centralizado de Gasto Tecnologico (plan Nexxus)", "estado": "No aplica", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-156", "equipo": "MET", "lider": "Luis Caris", "nombre": "Implementar plataforma Cloud Native basada en Kubernetes (Cluster Linux) para los entornos de Desarrollo, Test y Producción, incluyendo persistencia basada en NFS.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-157", "equipo": "MET", "lider": "Luis Caris", "nombre": "Implementar plataforma de control de versión de código basada en GIT como reemplazo de SVN.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-158", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "Desafio Migración Origins", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-159", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "implementacion Nueva definicion perfilamiento web. (Web Filter)", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-160", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de virtualización y contenerización para mitigar el aumento de costos de vmware", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-161", "equipo": "Base de datos", "lider": "Víctor Reyes", "nombre": "Migración de servidores de BD MSSQLServer a versión 2022", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-162", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluación de nueva solución de respaldo de datos historicos, que nos permita mitigar los costos de la alza de precios por la crisis de escases de almacenamiento electronico", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-163", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Mejorar las capacidades de la red Hendaya considerando el aumento de la presencialidad de la compañía", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-164", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Respaldos de BBDD SQL Server con Veeam", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-165", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Respaldos de BBDD PostgreSQL con Veeam", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-166", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Definir servidor para alojar base de datos Gitlab y definirlo como Infraestructura", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-167", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "Centralizar claves admin en EETT", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-168", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "La curva", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-169", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "La curva", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-170", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de Virtualización de maquinas virtuales que nos ayuden a salir del proveedor VmWare por tema de costos, o buscar alternativas viables de combinación de productos.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-171", "equipo": "Arquitectura", "lider": "Eli Lovera", "nombre": "Nueva Gestor Documental", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-172", "equipo": "Arquitectura", "lider": "Eli Lovera", "nombre": "Multi Captcha", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}];
+const DATA = [{"codigo": "D26-20", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "Restructurar Proceso de parchado, disminuir HH en procesos de actualización.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-21", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de virtual patch, para aumentar cobertura de servidores producción con el fin de disminuir cantidad de mantenciones de servidores de producción debido a vulnerabilidades que deben ser mitigadas mediante parches de actualización.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-22", "equipo": "Equipo MET", "lider": "Luis Caris", "nombre": "Disminuir tiempo de generación de entregables de auditorias del gestión", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-23", "equipo": "Arquitectura", "lider": "Luis Sanzana", "nombre": "Evaluación Github Copilot", "estado": "Completado", "gerencia": "Procesos de Inversiones", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-24", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "nombre": "Implementar una nueva metodología de medición de productividad y control de desarrollo", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-38", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "nombre": "Democratización IA en equipos usuarios, prueba piloto", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "avance_enero": 60, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-39", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "nombre": "Democratización IA en equipos usuarios, herramienta definitiva", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "avance_enero": 20, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-150", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Renovación de nuevos firewalls de borde con equipos carrier class que nos ofrece un 200% más de potencia y adicionalmente permite virtualización de firewall.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-151", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de telefonia para migrar el cisco call manager, adicionalmente que ofresca omnicalidad de comunicación como son whatsapp", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-152", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de correo electrónico que permitan mejorar la seguridad, administración y gestión del correo interno.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-153", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Aumento de capacidad de Storages sites Lidice y Panamericana.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-154", "equipo": "Transversales", "lider": "Jovan Lausic", "nombre": "Migración Chronus 2.0", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-155", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "nombre": "Panel Centralizado de Gasto Tecnologico (plan Nexus)", "estado": "No aplica", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-156", "equipo": "MET", "lider": "Luis Caris", "nombre": "Implementar plataforma Cloud Native basada en Kubernetes (Cluster Linux) para los entornos de Desarrollo, Test y Producción, incluyendo persistencia basada en NFS.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-157", "equipo": "MET", "lider": "Luis Caris", "nombre": "Implementar plataforma de control de versión de código basada en GIT como reemplazo de SVN.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-158", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "Desafio Migración Origins", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-159", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "implementacion Nueva definicion perfilamiento web. (Web Filter)", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-160", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de virtualización y contenerización para mitigar el aumento de costos de vmware", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-161", "equipo": "Base de datos", "lider": "Víctor Reyes", "nombre": "Migración de servidores de BD MSSQLServer a versión 2022", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-162", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluación de nueva solución de respaldo de datos historicos, que nos permita mitigar los costos de la alza de precios por la crisis de escases de almacenamiento electronico", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-163", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Mejorar las capacidades de la red Hendaya considerando el aumento de la presencialidad de la compañía", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-164", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Respaldos de BBDD SQL Server con Veeam", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-165", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Respaldos de BBDD PostgreSQL con Veeam", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-166", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Definir servidor para alojar base de datos Gitlab y definirlo como Infraestructura", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-167", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "Centralizar claves admin en EETT", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-168", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "La curva", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-169", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "La curva", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-170", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de Virtualización de maquinas virtuales que nos ayuden a salir del proveedor VmWare por tema de costos, o buscar alternativas viables de combinación de productos.", "estado": "No aplica", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-171", "equipo": "Arquitectura", "lider": "Eli Lovera", "nombre": "Nueva Gestor Documental", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-172", "equipo": "Arquitectura", "lider": "Eli Lovera", "nombre": "Multi Captcha", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}];
 
 // ── Normalize equipo names + Comité logic ──
 DATA.forEach(d => {
@@ -478,6 +502,7 @@ DATA.forEach(d => {
 // ══════════════════════════════════════════════
 let activeFilter   = null;
 let activeGerencia = null;
+let activeEquipo   = null;
 
 const ESTADO_COLORS = {
   'Completado':  '#00e676',
@@ -492,6 +517,7 @@ function getFiltered() {
   let subset = DATA;
   if (activeFilter)   subset = subset.filter(d => d.estado   === activeFilter);
   if (activeGerencia) subset = subset.filter(d => d.gerencia === activeGerencia);
+  if (activeEquipo)   subset = subset.filter(d => d.equipo   === activeEquipo);
   return subset;
 }
 
@@ -502,6 +528,11 @@ function applyFilter(estado) {
 
 function applyGerenciaFilter(gerencia) {
   activeGerencia = (activeGerencia === gerencia) ? null : gerencia;
+  refreshAll();
+}
+
+function applyEquipoFilter(equipo) {
+  activeEquipo = (activeEquipo === equipo) ? null : equipo;
   refreshAll();
 }
 
@@ -557,7 +588,10 @@ const donutChart = new Chart(document.getElementById('chartEstado'), {
               index: i,
             }));
           },
-          filter: () => true
+          filter: (item) => {
+            const realCount = DATA.filter(d => d.estado === ESTADO_KEYS[item.index]).length;
+            return realCount > 0;
+          }
         },
         maxWidth: 9999,
         onClick(e, item) { applyFilter(ESTADO_KEYS[item.index]); }
@@ -587,15 +621,53 @@ const barChart = new Chart(document.getElementById('chartEquipo'), {
         backgroundColor: 'rgba(0,230,118,0.7)', borderRadius: 4, borderSkipped: false },
       { label: 'Atrasado',      data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Atrasado').length),
         backgroundColor: 'rgba(255,82,82,0.7)',  borderRadius: 4, borderSkipped: false },
+      { label: 'N/A',           data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='No aplica').length),
+        backgroundColor: 'rgba(139,148,158,0.7)', borderRadius: 4, borderSkipped: false },
     ]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
+    onClick(e, els) {
+      if (!els.length) { applyEquipoFilter(null); return; }
+      const equipo = allEquipos[els[0].index];
+      applyEquipoFilter(equipo);
+    },
     scales: {
       x: { stacked: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 10 } } },
       y: { stacked: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { stepSize: 1 } }
     },
-    plugins: { legend: { position: 'bottom', align: 'center', labels: { padding: 14, boxWidth: 10, boxHeight: 10, font: { size: 11 }, color: '#8b949e', usePointStyle: true, pointStyleWidth: 10 } } }
+    plugins: {
+      legend: {
+        position: 'bottom', align: 'center',
+        labels: {
+          padding: 14, boxWidth: 10, boxHeight: 10,
+          font: { size: 11 }, color: '#8b949e',
+          usePointStyle: true, pointStyleWidth: 10,
+          generateLabels(chart) {
+            const DATASET_ESTADOS = ['Desarrollo', 'Completado', 'Atrasado', 'No aplica'];
+            const DATASET_COLORS  = ['rgba(255,214,0,0.7)','rgba(0,230,118,0.7)','rgba(255,82,82,0.7)','rgba(139,148,158,0.7)'];
+            return ['En Desarrollo','Completado','Atrasado','N/A'].map((label, i) => ({
+              text: label,
+              fillStyle: DATASET_ESTADOS[i] === activeFilter
+                ? DATASET_COLORS[i]
+                : (activeFilter ? 'rgba(139,148,158,0.25)' : DATASET_COLORS[i]),
+              strokeStyle: 'transparent',
+              fontColor: '#8b949e',
+              hidden: false,
+              index: i,
+            }));
+          },
+          filter: (item) => {
+            const DATASET_ESTADOS = ['Desarrollo', 'Completado', 'Atrasado', 'No aplica'];
+            return DATA.filter(d => d.estado === DATASET_ESTADOS[item.index]).length > 0;
+          }
+        },
+        onClick(e, item) {
+          const DATASET_ESTADOS = ['Desarrollo', 'Completado', 'Atrasado', 'No aplica'];
+          applyFilter(DATASET_ESTADOS[item.index]);
+        }
+      }
+    }
   }
 });
 
@@ -669,16 +741,20 @@ function refreshAll() {
   donutChart.update();
 
   // ── Barras: opacidad según filtro ──
-  const DATASET_ESTADO = ['Desarrollo','Completado','Atrasado'];
-  const DATASET_COLORS = ['rgba(255,214,0,0.7)','rgba(0,230,118,0.7)','rgba(255,82,82,0.7)'];
+  const DATASET_ESTADO = ['Desarrollo','Completado','Atrasado','No aplica'];
+  const DATASET_COLORS = ['rgba(255,214,0,0.7)','rgba(0,230,118,0.7)','rgba(255,82,82,0.7)','rgba(139,148,158,0.7)'];
   barChart.data.datasets.forEach((ds, i) => {
     const estado = DATASET_ESTADO[i];
     const col = DATASET_COLORS[i];
     if (!activeFilter) {
-      ds.backgroundColor = col;
+      ds.backgroundColor = allEquipos.map(e =>
+        activeEquipo ? (e === activeEquipo ? col : col.replace('0.7','0.15')) : col
+      );
       ds.data = allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado===estado).length);
     } else if (activeFilter === estado) {
-      ds.backgroundColor = col;
+      ds.backgroundColor = allEquipos.map(e =>
+        activeEquipo ? (e === activeEquipo ? col : col.replace('0.7','0.15')) : col
+      );
       ds.data = allEquipos.map(e => subset.filter(d=>d.equipo===e).length);
     } else {
       ds.backgroundColor = 'rgba(139,148,158,0.12)';
@@ -686,6 +762,9 @@ function refreshAll() {
     }
   });
   barChart.update();
+  // Forzar regeneración de leyenda de barras
+  barChart.options.plugins.legend.labels.generateLabels(barChart);
+  barChart.update('none');
 
   // ── Línea: recalcular con subset ──
   // Para avance mensual usamos el acumulado hasta ese mes
@@ -738,14 +817,42 @@ function refreshAll() {
   // ── Botones de filtro ──
   document.querySelectorAll('.filter-btn').forEach(b => {
     const val = b.dataset.estado;
+    // Toggle activo
     b.classList.toggle('active', val === (activeFilter || 'Todos'));
+    // Mostrar solo si hay datos (excepto "Todos" que siempre se muestra)
+    if (val !== 'Todos') {
+      const count = DATA.filter(d => d.estado === val).length;
+      b.style.display = count > 0 ? 'inline-block' : 'none';
+    }
   });
+}
+
+// ── Buscador ──
+let searchTerm = '';
+function applySearch(val) {
+  searchTerm = val.toLowerCase().trim();
+  renderTable(getFiltered());
 }
 
 // ── Tabla ──
 function renderTable(subset) {
   const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = subset.map(d => {
+  const rows = searchTerm
+    ? subset.filter(d =>
+        d.nombre.toLowerCase().includes(searchTerm) ||
+        d.equipo.toLowerCase().includes(searchTerm) ||
+        d.lider.toLowerCase().includes(searchTerm)  ||
+        d.codigo.toLowerCase().includes(searchTerm)
+      )
+    : subset;
+
+  // Mostrar contador si hay búsqueda activa
+  const counter = document.getElementById('searchCounter');
+  if (counter) {
+    counter.textContent = searchTerm ? `${rows.length} resultado${rows.length !== 1 ? 's' : ''}` : '';
+  }
+
+  tbody.innerHTML = rows.map(d => {
     const av = d.avance_marzo ?? d.avance_febrero ?? d.avance_enero;
     const pct = av !== null && av !== undefined ? av : null;
     const tagClass = d.estado==='Completado'?'completado':d.estado==='Desarrollo'?'desarrollo':d.estado==='Atrasado'?'atrasado':'noaplica';
@@ -772,6 +879,17 @@ function renderTable(subset) {
       <td style="text-align:center">${comiteHtml}</td>
     </tr>`;
   }).join('');
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">
+      Sin resultados para "<span style="color:var(--accent)">${searchTerm}</span>"
+    </td></tr>`;
+  }
+}
+
+// ── Botones de filtro manual (tabla) ──
+function filterTable(estado) {
+  applyFilter(estado === 'Todos' ? null : estado);
 }
 
 // ══════════════════════════════════
@@ -853,11 +971,6 @@ function renderGerencias(subset) {
       </div>
     </div>`;
   }).join('');
-}
-
-// ── Botones de filtro manual (tabla) ──
-function filterTable(estado, btn) {
-  applyFilter(estado === 'Todos' ? null : estado);
 }
 
 // ══════════════════════════
