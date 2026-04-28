@@ -73,39 +73,228 @@
     font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.08em;
   }
   .badge strong { color: var(--accent); }
+  .badge.corte-selector {
+    padding: 4px 8px 4px 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .corte-select {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: 12px;
+    padding: 4px 24px 4px 6px;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><polygon points='0,2 10,2 5,8' fill='%2300f2ff'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+  }
+  .corte-select:hover { background-color: rgba(0,242,255,0.08); border-radius: 3px; }
+  .corte-select option { background: #0f1419; color: var(--accent); }
 
   /* ── KPI Row ── */
-  .kpi-row {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px; margin-bottom: 32px;
+  .kpi-row.hero-row {
+    display: grid;
+    grid-template-columns: minmax(360px, 1.6fr) repeat(4, 1fr);
+    gap: 16px; margin-bottom: 12px;
   }
-  .kpi-card {
+  
+  /* Hero card */
+  .kpi-hero {
+    --hero-color: var(--accent);
+    --hero-rgb: 0,242,255;
+    background: linear-gradient(135deg, rgba(var(--hero-rgb),0.08) 0%, rgba(8,10,12,0.95) 100%);
+    border: 1px solid rgba(var(--hero-rgb),0.25);
+    border-radius: var(--card-r);
+    padding: 18px 22px;
+    position: relative;
+    animation: fadeUp 0.5s ease both;
+    transition: background 0.4s ease, border-color 0.4s ease;
+  }
+  .kpi-hero.salud-completo  { --hero-color: #00f2ff; --hero-rgb: 0,242,255; }
+  .kpi-hero.salud-positivo  { --hero-color: #00e676; --hero-rgb: 0,230,118; }
+  .kpi-hero.salud-neutro    { --hero-color: #ffd600; --hero-rgb: 255,214,0; }
+  .kpi-hero.salud-negativo  { --hero-color: #ff5252; --hero-rgb: 255,82,82; }
+  .kpi-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--hero-color);
+    box-shadow: 0 0 12px var(--hero-color);
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+  }
+  .kpi-hero-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--hero-color); margin-bottom: 12px;
+    font-family: 'Inter', sans-serif; font-weight: 600;
+    transition: color 0.4s ease;
+  }
+  .kpi-hero-main {
+    display: flex; align-items: baseline; gap: 12px;
+    flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .kpi-hero-real { display: flex; align-items: baseline; gap: 4px; }
+  .kpi-hero-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 38px; font-weight: 700; line-height: 1;
+    color: var(--hero-color);
+    transition: color 0.4s ease;
+  }
+  .kpi-hero-value-sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 600; line-height: 1;
+    color: var(--muted);
+  }
+  .kpi-hero-unit { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .kpi-hero-vs { font-size: 11px; color: var(--muted); font-style: italic; }
+  .kpi-hero-esp { display: flex; align-items: baseline; gap: 4px; }
+  .kpi-hero-delta {
+    margin-left: auto;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px; font-weight: 700;
+    padding: 4px 10px; border-radius: 4px;
+    border: 1px solid; white-space: nowrap;
+  }
+  .kpi-hero-delta.positivo { color: var(--green); border-color: var(--green); background: rgba(0,230,118,0.1); }
+  .kpi-hero-delta.neutro   { color: var(--amber); border-color: var(--amber); background: rgba(255,214,0,0.1); }
+  .kpi-hero-delta.negativo { color: var(--red); border-color: var(--red); background: rgba(255,82,82,0.1); }
+  
+  .kpi-hero-bar { margin-bottom: 10px; }
+  .kpi-hero-bar-bg {
+    position: relative; height: 6px;
+    background: var(--surface2); border-radius: 999px; overflow: visible;
+  }
+  .kpi-hero-bar-real {
+    height: 100%; background: var(--hero-color); border-radius: 999px;
+    box-shadow: 0 0 8px rgba(var(--hero-rgb),0.5);
+    transition: width 0.6s ease, background 0.4s ease, box-shadow 0.4s ease;
+  }
+  .kpi-hero-bar-marker {
+    position: absolute; top: -3px; width: 2px; height: 12px;
+    background: var(--muted); border-radius: 1px;
+    transition: left 0.6s ease;
+  }
+  .kpi-hero-bar-marker::after {
+    content: ''; position: absolute; top: -3px; left: -3px;
+    width: 8px; height: 8px; border-radius: 50%;
+    border: 2px solid var(--muted); background: var(--bg);
+  }
+  .kpi-hero-msg {
+    font-size: 11px; color: var(--muted); line-height: 1.4;
+    font-style: italic;
+  }
+  
+  /* Delta tooltip (comparativa histórica) */
+  .has-delta { position: relative; }
+  .delta-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px); right: 8px;
+    background: #1c2128;
+    border: 1px solid rgba(0,242,255,0.25);
+    border-radius: 6px;
+    padding: 8px 12px;
+    min-width: 140px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    opacity: 0; pointer-events: none;
+    transform: translateY(4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 100;
+  }
+  .delta-tooltip::after {
+    content: ''; position: absolute;
+    bottom: -5px; right: 16px;
+    width: 8px; height: 8px;
+    background: #1c2128;
+    border-right: 1px solid rgba(0,242,255,0.25);
+    border-bottom: 1px solid rgba(0,242,255,0.25);
+    transform: rotate(45deg);
+  }
+  .has-delta:hover .delta-tooltip {
+    opacity: 1; transform: translateY(0);
+  }
+  .delta-tip-mes {
+    font-size: 11px; color: var(--muted);
+    text-align: center; padding: 6px 0;
+    font-style: italic;
+  }
+  .delta-tip-row {
+    display: flex; justify-content: space-between;
+    align-items: baseline; gap: 12px;
+    font-size: 11px; padding: 2px 0;
+    color: var(--muted);
+  }
+  .delta-tip-row.current {
+    color: var(--text); font-weight: 600;
+  }
+  .delta-tip-label { font-family: 'Inter', sans-serif; }
+  .delta-tip-val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 13px;
+  }
+  .delta-tip-delta {
+    margin-top: 6px; padding-top: 6px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    text-align: center; font-size: 11px;
+  }
+  .delta {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 12px;
+  }
+  .delta.positivo { color: var(--green); }
+  .delta.negativo { color: var(--red); }
+  .delta.neutral  { color: var(--muted); font-weight: 400; font-style: italic; }
+  
+  /* Satélites */
+  .kpi-sat {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--card-r); padding: 20px 24px;
-    position: relative; overflow: hidden;
+    border-radius: var(--card-r); padding: 12px 14px;
+    position: relative;
     animation: fadeUp 0.5s ease both;
     transition: all 0.3s ease;
+    display: flex; flex-direction: column; justify-content: center;
+    min-height: 92px;
   }
-  .kpi-card:hover { border-color: var(--accent); transform: translateY(-4px); }
-  .kpi-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  .kpi-sat:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .kpi-sat::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    border-top-left-radius: var(--card-r); border-top-right-radius: var(--card-r);
   }
-  .kpi-card.total::before  { background: var(--accent); }
-  .kpi-card.done::before   { background: var(--green); }
-  .kpi-card.dev::before    { background: var(--amber); }
-  .kpi-card.noap::before   { background: var(--muted); }
-  .kpi-card.atrasado::before { background: var(--red); }
-
-  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; font-family: 'Inter', sans-serif; }
-  .kpi-value {
-    font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; line-height: 1;
+  .kpi-sat.atrasado::before     { background: var(--red); }
+  .kpi-sat.sinreporte::before   { background: #ff9800; }
+  .kpi-sat.proximo::before      { background: #ff9800; }
+  .kpi-sat.planificados::before { background: var(--muted); }
+  .kpi-sat-label {
+    font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin-bottom: 4px;
+    font-family: 'Inter', sans-serif; font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .kpi-card.total  .kpi-value { color: var(--accent); }
-  .kpi-card.done   .kpi-value { color: var(--green); }
-  .kpi-card.dev    .kpi-value { color: var(--amber); }
-  .kpi-card.noap   .kpi-value { color: var(--muted); }
-  .kpi-card.atrasado .kpi-value { color: var(--red); }
-  .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .kpi-sat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 30px; font-weight: 700; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-sat.atrasado .kpi-sat-value     { color: var(--red); }
+  .kpi-sat.sinreporte .kpi-sat-value   { color: #ff9800; }
+  .kpi-sat.proximo .kpi-sat-value      { color: #ff9800; }
+  .kpi-sat.planificados .kpi-sat-value { color: var(--muted); }
+  .kpi-sat-sub {
+    font-size: 10px; color: var(--muted);
+    line-height: 1.3;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .kpi-row.hero-row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .kpi-hero { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .kpi-row.hero-row { grid-template-columns: 1fr; }
+  }
 
   /* ── Charts grid ── */
   .charts-grid {
@@ -129,21 +318,97 @@
   .chart-sub { font-size: 11px; color: var(--muted); margin-bottom: 20px; letter-spacing: 0.05em; }
   .chart-wrap { position: relative; }
 
-  /* ── Progress bar ── */
-  .progress-list { display: flex; flex-direction: column; gap: 14px; }
-  .progress-item {}
-  .progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-  .progress-name { font-size: 12px; color: var(--text); font-weight: 500; }
-  .progress-pct  { font-size: 12px; color: var(--muted); font-family: 'Syne', sans-serif; }
-  .progress-bar-bg {
-    height: 6px; background: var(--surface2); border-radius: 999px; overflow: hidden;
+  /* ── Radar de Atención ── */
+  .radar-list {
+    display: flex; flex-direction: column; gap: 14px;
+    max-height: 380px; overflow-y: auto;
+    padding-right: 4px;
   }
-  .progress-bar-fill {
-    height: 100%; border-radius: 999px;
-    background: var(--accent);
-    transition: width 1s ease;
+  .radar-list::-webkit-scrollbar { width: 6px; }
+  .radar-list::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+  .radar-section { display: flex; flex-direction: column; gap: 6px; }
+  .radar-heading {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    color: var(--muted); margin-bottom: 2px;
   }
-  .progress-bar-fill.green { background: var(--green); }
+  .radar-heading.atrasado   { color: #ff5252; }
+  .radar-heading.sinreporte { color: #ff9800; }
+  .radar-heading.enriesgo   { color: #b388ff; }
+  .radar-heading.proximo    { color: #00f2ff; }
+  .radar-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .radar-count {
+    margin-left: auto; color: var(--muted);
+    font-size: 10px; opacity: 0.8;
+  }
+  .radar-item {
+    padding: 8px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.02);
+    border-left: 3px solid transparent;
+    cursor: pointer; transition: all 0.15s ease;
+  }
+  .radar-item:hover {
+    background: rgba(255,255,255,0.05);
+    transform: translateX(2px);
+  }
+  .radar-item.atrasado   { border-left-color: #ff5252; }
+  .radar-item.sinreporte { border-left-color: #ff9800; }
+  .radar-item.enriesgo   { border-left-color: #b388ff; }
+  .radar-item.proximo    { border-left-color: rgba(0,242,255,0.5); }
+  .radar-item.is-foco {
+    background: linear-gradient(90deg, rgba(0,242,255,0.06), rgba(255,255,255,0.02));
+    box-shadow: 0 0 0 1px rgba(0,242,255,0.2);
+  }
+  .radar-foco-badge {
+    color: var(--accent);
+    font-size: 12px; font-weight: 700;
+    text-shadow: 0 0 6px rgba(0,242,255,0.6);
+  }
+  .radar-item-top {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .radar-cod {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .radar-avance {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 3px;
+    background: rgba(255,82,82,0.15); color: #ff5252;
+  }
+  .radar-dias {
+    margin-left: auto;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px; font-weight: 500;
+  }
+  .radar-dias.dias-vencido { color: #ff5252; }
+  .radar-dias.dias-urgente { color: #ff9800; }
+  .radar-dias.dias-normal  { color: var(--muted); }
+  .radar-item-name {
+    font-size: 12px; color: var(--text); line-height: 1.35;
+    margin-bottom: 4px;
+  }
+  .radar-item-foot {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    font-size: 10px; color: var(--muted);
+  }
+  .radar-lider { font-weight: 500; }
+  .radar-equipo {
+    opacity: 0.7;
+    padding: 1px 6px; border-radius: 3px;
+    background: rgba(0,242,255,0.08);
+    color: rgba(0,242,255,0.8);
+  }
+  .radar-empty {
+    text-align: center; padding: 40px 20px;
+  }
 
   /* ── Table ── */
   .table-card {
@@ -155,6 +420,83 @@
     padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
   }
+  .breadcrumb-container {
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,242,255,0.025);
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap;
+    animation: fadeIn 0.3s ease;
+  }
+  .breadcrumb-label {
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-right: 4px; font-family: 'Inter', sans-serif;
+  }
+  .breadcrumb-segment {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    font-size: 11px; color: var(--text);
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .breadcrumb-segment:hover {
+    background: rgba(0,242,255,0.08);
+    border-color: var(--accent);
+  }
+  .breadcrumb-segment.last {
+    background: rgba(0,242,255,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+    cursor: default;
+    font-weight: 600;
+  }
+  .breadcrumb-segment.last:hover { background: rgba(0,242,255,0.12); }
+  /* Colores por estado cuando el último segmento es un estado */
+  .breadcrumb-segment.last.bc-completado  { background:rgba(0,242,255,0.12);  border-color:#00f2ff; color:#00f2ff; }
+  .breadcrumb-segment.last.bc-completado:hover  { background:rgba(0,242,255,0.12); }
+  .breadcrumb-segment.last.bc-desarrollo  { background:rgba(0,230,118,0.12);  border-color:#00e676; color:#00e676; }
+  .breadcrumb-segment.last.bc-desarrollo:hover  { background:rgba(0,230,118,0.12); }
+  .breadcrumb-segment.last.bc-atrasado    { background:rgba(255,82,82,0.12);  border-color:#ff5252; color:#ff5252; }
+  .breadcrumb-segment.last.bc-atrasado:hover    { background:rgba(255,82,82,0.12); }
+  .breadcrumb-segment.last.bc-sinreporte  { background:rgba(255,152,0,0.12);  border-color:#ff9800; color:#ff9800; }
+  .breadcrumb-segment.last.bc-sinreporte:hover  { background:rgba(255,152,0,0.12); }
+  .breadcrumb-segment.last.bc-planificado { background:rgba(139,148,158,0.12);border-color:#8b949e; color:#8b949e; }
+  .breadcrumb-segment.last.bc-planificado:hover { background:rgba(139,148,158,0.12); }
+  .breadcrumb-segment .seg-count {
+    font-size: 10px; opacity: 0.7;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .breadcrumb-arrow {
+    color: var(--muted);
+    font-size: 11px;
+    margin: 0 -2px;
+  }
+  .breadcrumb-clear {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid rgba(255,82,82,0.3);
+    color: #ff5252;
+    font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.15s ease;
+  }
+  .breadcrumb-clear:hover {
+    background: rgba(255,82,82,0.1);
+    border-color: #ff5252;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
   .filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .filter-btn {
     background: transparent; border: 1px solid var(--border);
@@ -164,16 +506,18 @@
     transition: all 0.2s;
   }
   .filter-btn:hover, .filter-btn.active {
-    background: rgba(0,242,255,0.1); border-color: var(--accent); color: var(--accent);
+    background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); color: #ffffff;
   }
   .filter-btn[data-estado="Completado"]:hover,
-  .filter-btn.active[data-estado="Completado"] { background:rgba(0,230,118,0.1);  border-color:#00e676; color:#00e676; }
-  .filter-btn[data-estado="Desarrollo"]:hover,
-  .filter-btn.active[data-estado="Desarrollo"] { background:rgba(255,214,0,0.1);  border-color:#ffd600; color:#ffd600; }
+  .filter-btn.active[data-estado="Completado"] { background:rgba(0,242,255,0.1);  border-color:#00f2ff; color:#00f2ff; }
+  .filter-btn[data-estado="En desarrollo"]:hover,
+  .filter-btn.active[data-estado="En desarrollo"] { background:rgba(0,230,118,0.1); border-color:#00e676; color:#00e676; }
   .filter-btn[data-estado="Atrasado"]:hover,
   .filter-btn.active[data-estado="Atrasado"]   { background:rgba(255,82,82,0.1);  border-color:#ff5252; color:#ff5252; }
-  .filter-btn[data-estado="No aplica"]:hover,
-  .filter-btn.active[data-estado="No aplica"]  { background:rgba(139,148,158,0.1);border-color:#8b949e; color:#8b949e; }
+  .filter-btn[data-estado="Sin reporte"]:hover,
+  .filter-btn.active[data-estado="Sin reporte"] { background:rgba(255,152,0,0.1);  border-color:#ff9800; color:#ff9800; }
+  .filter-btn[data-estado="Planificado"]:hover,
+  .filter-btn.active[data-estado="Planificado"] { background:rgba(139,148,158,0.1);border-color:#8b949e; color:#8b949e; }
   table { width: 100%; border-collapse: collapse; }
   thead tr { background: var(--surface2); }
   th {
@@ -195,16 +539,58 @@
     font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
     border: 1px solid;
   }
-  .tag.completado { background: rgba(0,230,118,0.1);  color: #00e676; border-color: #00e676; }
-  .tag.desarrollo { background: rgba(255,214,0,0.1);  color: #ffd600; border-color: #ffd600; }
+  .tag.completado { background: rgba(0,242,255,0.1);  color: #00f2ff; border-color: #00f2ff; }
+  .tag.desarrollo { background: rgba(0,230,118,0.1);  color: #00e676; border-color: #00e676; }
+  .tag.planificado{ background: rgba(139,148,158,0.1); color: #8b949e; border-color: #8b949e; }
   .tag.noaplica   { background: rgba(139,148,158,0.1); color: #8b949e; border-color: #8b949e; }
   .tag.atrasado   { background: rgba(255,82,82,0.1);  color: #ff5252; border-color: #ff5252; }
+  .tag.enplazo    { background: rgba(0,230,118,0.1);  color: #00e676; border-color: #00e676; }
+  .tag.sinreporte { background: rgba(255,152,0,0.1);  color: #ff9800; border-color: #ff9800; }
+  .tag.poriniciar { background: rgba(139,148,158,0.1); color: #8b949e; border-color: #8b949e; }
+  .riesgo-icon {
+    display: inline-block; margin-left: 6px;
+    color: #b388ff; font-size: 14px;
+    text-shadow: 0 0 6px rgba(179,136,255,0.5);
+    cursor: help;
+  }
 
-  .avance-cell { display: flex; align-items: center; gap: 8px; }
-  .mini-bar { flex: 1; height: 4px; background: var(--surface2); border-radius: 999px; min-width: 50px; }
+  .avance-cell { display: flex; flex-direction: column; gap: 3px; }
+  .avance-main { display: flex; align-items: center; gap: 8px; }
+  .mini-bar {
+    flex: 1; height: 4px;
+    background: var(--surface2); border-radius: 999px; min-width: 50px;
+    position: relative; overflow: visible;
+  }
   .mini-fill { height: 100%; border-radius: 999px; background: var(--accent); }
+  .bar-marker {
+    position: absolute;
+    top: -3px;
+    width: 2px; height: 10px;
+    background: rgba(255,255,255,0.65);
+    border-radius: 1px;
+    transform: translateX(-1px);
+    pointer-events: auto;
+    cursor: help;
+  }
+  .bar-marker::after {
+    content: ''; position: absolute;
+    top: -3px; left: -2px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 0 4px rgba(255,255,255,0.4);
+  }
   .mini-fill.green { background: var(--green); }
   .avance-pct { font-size: 11px; color: var(--muted); width: 32px; text-align: right; font-family: 'Syne', sans-serif; }
+  .sparkline {
+    display: inline-block; vertical-align: middle;
+    margin-left: 4px; opacity: 0.85;
+  }
+  .sparkline:hover { opacity: 1; }
+  .plan-mini {
+    font-size: 9px; color: var(--muted); font-family: 'Inter', sans-serif;
+    letter-spacing: 0.05em; opacity: 0.75;
+  }
 
   .equipo-chip {
     background: rgba(0,242,255,0.05); border: 1px solid rgba(0,242,255,0.15);
@@ -240,6 +626,82 @@
     .chart-card.wide { grid-column: span 1; }
   }
 
+  /* ── Líder Panel ── */
+  .lider-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px; margin-top: 8px;
+  }
+  .lider-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    transition: all 0.2s ease;
+  }
+  .lider-card:hover {
+    border-color: rgba(0,242,255,0.3);
+    background: rgba(255,255,255,0.04);
+  }
+  .lider-card.alerta {
+    border-color: rgba(255,82,82,0.3);
+    background: rgba(255,82,82,0.04);
+  }
+  .lider-card.atencion {
+    border-color: rgba(255,152,0,0.3);
+    background: rgba(255,152,0,0.04);
+  }
+  .lider-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px; gap: 8px;
+  }
+  .lider-nombre {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    font-family: 'Inter', sans-serif;
+  }
+  .lider-total {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px; font-weight: 700; color: var(--accent);
+    white-space: nowrap;
+  }
+  .lider-total .lider-tot-lbl {
+    font-size: 9px; font-weight: 500; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-left: 2px;
+  }
+  .lider-bar {
+    display: flex; height: 6px; border-radius: 3px; overflow: hidden;
+    background: rgba(255,255,255,0.04); margin-bottom: 8px;
+  }
+  .lider-bar-seg {
+    height: 100%;
+    transition: opacity 0.2s ease;
+  }
+  .lider-bar-seg.comp { background: #00f2ff; }
+  .lider-bar-seg.des  { background: #00e676; }
+  .lider-bar-seg.atr  { background: #ff5252; }
+  .lider-bar-seg.sr   { background: #ff9800; }
+  .lider-bar-seg.plan { background: #8b949e; }
+  .lider-badges {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    font-size: 10px;
+  }
+  .lider-badge {
+    padding: 2px 6px; border-radius: 3px;
+    font-family: 'Inter', sans-serif; font-weight: 500;
+    border: 1px solid;
+  }
+  .lider-badge.comp { background: rgba(0,242,255,0.08); color: #00f2ff; border-color: rgba(0,242,255,0.3); }
+  .lider-badge.des  { background: rgba(0,230,118,0.08); color: #00e676; border-color: rgba(0,230,118,0.3); }
+  .lider-badge.atr  { background: rgba(255,82,82,0.08); color: #ff5252; border-color: rgba(255,82,82,0.3); }
+  .lider-badge.sr   { background: rgba(255,152,0,0.08); color: #ff9800; border-color: rgba(255,152,0,0.3); }
+  .lider-badge.plan { background: rgba(139,148,158,0.08); color: #8b949e; border-color: rgba(139,148,158,0.3); }
+  .lider-equipos {
+    margin-top: 6px;
+    font-size: 10px; color: var(--muted);
+    line-height: 1.4;
+  }
+
   /* ── Gerencia Scorecard ── */
   .ger-row {
     display: grid;
@@ -268,16 +730,36 @@
     font-family: 'Inter', sans-serif; font-weight: 600;
     border: 1px solid; letter-spacing: 0.05em;
   }
-  .ger-badge.comp { background:rgba(0,230,118,0.1);  color:#00e676; border-color:#00e676; }
-  .ger-badge.dev  { background:rgba(255,214,0,0.1);  color:#ffd600; border-color:#ffd600; }
+  .ger-badge.comp { background:rgba(0,242,255,0.1);  color:#00f2ff; border-color:#00f2ff; }
+  .ger-badge.dev  { background:rgba(0,230,118,0.1);  color:#00e676; border-color:#00e676; }
   .ger-badge.noap { background:rgba(139,148,158,0.1);color:#8b949e; border-color:#8b949e; }
   .ger-badge.atr  { background:rgba(255,82,82,0.1);  color:#ff5252; border-color:#ff5252; }
+  .ger-badge.sr   { background:rgba(255,152,0,0.1);  color:#ff9800; border-color:#ff9800; }
   .ger-progress-wrap { display:flex; flex-direction:column; gap:6px; }
   .ger-progress-label { display:flex; justify-content:space-between; }
   .ger-progress-sublabel { font-size:10px; color:var(--muted); font-family:'Inter',sans-serif; }
   .ger-progress-pct { font-size:11px; color:var(--text); font-family:'Space Grotesk',sans-serif; font-weight:600; }
-  .ger-bar-bg { height:8px; background:rgba(255,255,255,0.06); border-radius:999px; overflow:hidden; }
+  .ger-bar-bg {
+    height:8px; background:rgba(255,255,255,0.06); border-radius:999px;
+    position: relative;
+  }
   .ger-bar-fill { height:100%; border-radius:999px; transition: width 1s ease; }
+  .ger-bar-marker {
+    position: absolute; top: -2px;
+    width: 2px; height: 12px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 1px;
+    transform: translateX(-1px);
+    cursor: help;
+  }
+  .ger-bar-marker::after {
+    content: ''; position: absolute;
+    top: -3px; left: -3px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 4px rgba(255,255,255,0.5);
+  }
   .ger-total {
     font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;
     color:var(--accent); text-align:center; min-width:60px;
@@ -318,17 +800,120 @@
     font-family: 'Inter', sans-serif;
   }
   .tooltip-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 10px 0; }
+  .tooltip-hitos { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+  .tooltip-hito {
+    display: grid; grid-template-columns: 58px 1fr auto; gap: 8px;
+    align-items: center; font-size: 11px; line-height: 1.35;
+  }
+  .tooltip-hito-mes {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    color: var(--accent); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .tooltip-hito-act { color: #c9d1d9; font-size: 11px; }
+  .tooltip-hito-av {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 10px;
+    padding: 2px 6px; border-radius: 3px; border: 1px solid;
+    white-space: nowrap; min-width: 40px; text-align: center;
+  }
+
+  /* Tooltip Mini — para microcontextos (marcadores, iconos, badges) */
+  .tooltip-mini {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    max-width: 240px;
+    background: #1c2128;
+    border: 1px solid rgba(0,242,255,0.25);
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,242,255,0.05);
+    pointer-events: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .tooltip-mini.visible { display: block; animation: fadeUp 0.12s ease; }
+  .tooltip-mini-title {
+    font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 700;
+    color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .tooltip-mini-body {
+    font-size: 11.5px; color: #c9d1d9; line-height: 1.45;
+  }
+
+  /* Tooltip rico de proyectos (Carga por Líder) — usa .tooltip-box ancho */
+  .tooltip-box.wide-projects { width: 380px; }
+  .tooltip-projects {
+    display: flex; flex-direction: column; gap: 6px;
+    max-height: 320px; overflow-y: auto;
+    margin-top: 2px;
+  }
+  .tooltip-projects::-webkit-scrollbar { width: 4px; }
+  .tooltip-projects::-webkit-scrollbar-thumb { background: rgba(0,242,255,0.2); border-radius: 2px; }
+  .tooltip-project-row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 8px; align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .tooltip-project-row:last-child { border-bottom: none; }
+  .tooltip-project-cod {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 10px;
+    color: var(--accent); letter-spacing: 0.04em;
+  }
+  .tooltip-project-mid {
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  }
+  .tooltip-project-name {
+    font-size: 11px; color: #c9d1d9; line-height: 1.3;
+    overflow: hidden; text-overflow: ellipsis; display: -webkit-box;
+    -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  }
+  .tooltip-project-fecha {
+    font-size: 10px; color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .tooltip-project-badge {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 9px;
+    padding: 2px 6px; border-radius: 3px; border: 1px solid;
+    white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .tooltip-project-badge.comp { background: rgba(0,242,255,0.08); color: #00f2ff; border-color: rgba(0,242,255,0.3); }
+  .tooltip-project-badge.des  { background: rgba(0,230,118,0.08); color: #00e676; border-color: rgba(0,230,118,0.3); }
+  .tooltip-project-badge.atr  { background: rgba(255,82,82,0.08); color: #ff5252; border-color: rgba(255,82,82,0.3); }
+  .tooltip-project-badge.sr   { background: rgba(255,152,0,0.08); color: #ff9800; border-color: rgba(255,152,0,0.3); }
+  .tooltip-project-badge.plan { background: rgba(139,148,158,0.08); color: #8b949e; border-color: rgba(139,148,158,0.3); }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <!-- Tooltip flotante -->
   <div class="tooltip-box" id="tooltipBox">
+    <div class="tooltip-label">Líder</div>
+    <div class="tooltip-text" id="tooltipLider"></div>
+    <div class="tooltip-divider"></div>
     <div class="tooltip-label">Descripción</div>
     <div class="tooltip-text" id="tooltipDesc"></div>
     <div class="tooltip-divider"></div>
     <div class="tooltip-label">Indicador de Logro</div>
     <div class="tooltip-text" id="tooltipIndicador"></div>
+    <div class="tooltip-divider"></div>
+    <div class="tooltip-label">Hitos y Avances</div>
+    <div class="tooltip-hitos" id="tooltipHitos"></div>
+  </div>
+
+  <!-- Tooltip mini (microcontextos) -->
+  <div class="tooltip-mini" id="tooltipMini">
+    <div class="tooltip-mini-title" id="tooltipMiniTitle"></div>
+    <div class="tooltip-mini-body" id="tooltipMiniBody"></div>
+  </div>
+
+  <!-- Tooltip rico de proyectos (Carga por Líder) -->
+  <div class="tooltip-box wide-projects" id="tooltipProjects">
+    <div class="tooltip-label" id="tooltipProjectsLabel">Proyectos</div>
+    <div class="tooltip-text" id="tooltipProjectsLider" style="margin-bottom:6px;"></div>
+    <div class="tooltip-divider"></div>
+    <div class="tooltip-projects" id="tooltipProjectsList"></div>
   </div>
 
   <!-- Header -->
@@ -339,38 +924,70 @@
       <div class="subtitle">Seguimiento de avance · Comité de Tecnología</div>
     </div>
     <div class="header-right">
-      <div class="badge">Corte <strong>Marzo 2026</strong></div>
+      <div class="badge corte-selector">
+        Corte
+        <select id="selectorMesCorte" class="corte-select"></select>
+      </div>
       <div class="badge">Total <strong id="badge-total">—</strong> desafíos</div>
     </div>
   </header>
 
-  <!-- KPIs -->
-  <div class="kpi-row">
-    <div class="kpi-card total">
-      <div class="kpi-label">Total Desafíos</div>
-      <div class="kpi-value" id="kpi-total">—</div>
-      <div class="kpi-sub">Período 2026</div>
+  <!-- KPIs: hero + satélites -->
+  <div class="kpi-row hero-row">
+    
+    <!-- Hero: Salud del Portafolio -->
+    <div class="kpi-hero has-delta" id="kpi-hero">
+      <div class="kpi-hero-label">Salud del Portafolio</div>
+      <div class="kpi-hero-main">
+        <div class="kpi-hero-real">
+          <span class="kpi-hero-value" id="hero-real">—</span>
+          <span class="kpi-hero-unit">% real</span>
+        </div>
+        <div class="kpi-hero-vs">vs.</div>
+        <div class="kpi-hero-esp">
+          <span class="kpi-hero-value-sub" id="hero-esperado">—</span>
+          <span class="kpi-hero-unit">% esperado</span>
+        </div>
+        <div class="kpi-hero-delta" id="hero-delta">—</div>
+      </div>
+      <div class="kpi-hero-bar">
+        <div class="kpi-hero-bar-bg">
+          <div class="kpi-hero-bar-real" id="hero-bar-real"></div>
+          <div class="kpi-hero-bar-marker" id="hero-bar-marker"
+               onmouseenter="showMiniTooltip(event,'Esperado','Avance promedio que el portafolio debería tener al corte actual, según la línea base de cada desafío.')"
+               onmouseleave="hideMiniTooltip()"></div>
+        </div>
+      </div>
+      <div class="kpi-hero-msg" id="hero-msg">—</div>
+      <div class="delta-tooltip hero" id="delta-tip-hero"></div>
     </div>
-    <div class="kpi-card done">
-      <div class="kpi-label">Completados</div>
-      <div class="kpi-value" id="kpi-done">—</div>
-      <div class="kpi-sub" id="kpi-done-pct">— del total</div>
+    
+    <!-- Satélites -->
+    <div class="kpi-sat atrasado has-delta" id="kpi-atrasado-card">
+      <div class="kpi-sat-label">Atrasados</div>
+      <div class="kpi-sat-value" id="kpi-atrasado">—</div>
+      <div class="kpi-sat-sub" id="kpi-atrasado-sub">—</div>
+      <div class="delta-tooltip" id="delta-tip-atrasado"></div>
     </div>
-    <div class="kpi-card dev">
-      <div class="kpi-label">En Desarrollo</div>
-      <div class="kpi-value" id="kpi-dev">—</div>
-      <div class="kpi-sub" id="kpi-dev-pct">— del total</div>
+    <div class="kpi-sat sinreporte has-delta" id="kpi-sinreporte-card">
+      <div class="kpi-sat-label">Sin Reporte</div>
+      <div class="kpi-sat-value" id="kpi-sinreporte">—</div>
+      <div class="kpi-sat-sub" id="kpi-sinreporte-sub">—</div>
+      <div class="delta-tooltip" id="delta-tip-sinreporte"></div>
     </div>
-    <div class="kpi-card atrasado">
-      <div class="kpi-label">Atrasados</div>
-      <div class="kpi-value" id="kpi-atrasado">—</div>
-      <div class="kpi-sub" id="kpi-atrasado-sub">Requieren atención</div>
+    <div class="kpi-sat proximo has-delta" id="kpi-proximo-card">
+      <div class="kpi-sat-label">Por Vencer</div>
+      <div class="kpi-sat-value" id="kpi-proximo">—</div>
+      <div class="kpi-sat-sub" id="kpi-proximo-sub">—</div>
+      <div class="delta-tooltip" id="delta-tip-proximo"></div>
     </div>
-    <div class="kpi-card noap">
-      <div class="kpi-label">No Aplica</div>
-      <div class="kpi-value" id="kpi-noap">—</div>
-      <div class="kpi-sub">Descartados o fusionados</div>
+    <div class="kpi-sat planificados has-delta" id="kpi-foco-card">
+      <div class="kpi-sat-label">Planificados</div>
+      <div class="kpi-sat-value" id="kpi-foco">—</div>
+      <div class="kpi-sat-sub" id="kpi-foco-sub">—</div>
+      <div class="delta-tooltip" id="delta-tip-foco"></div>
     </div>
+    
   </div>
 
   <!-- Charts -->
@@ -386,7 +1003,7 @@
     </div>
 
     <!-- Barras por equipo -->
-    <div class="chart-card wide" style="display:flex; flex-direction:column;">
+    <div class="chart-card wide" style="display:flex; flex-direction:column; grid-column: span 2;">
       <div class="chart-title">Desafíos por Equipo Responsable</div>
       <div class="chart-sub">Cantidad de desafíos activos y completados por equipo</div>
       <div class="chart-wrap" style="height:210px; flex:1">
@@ -394,20 +1011,20 @@
       </div>
     </div>
 
-    <!-- Avance mensual -->
+    <!-- Evolución mensual (destacada) -->
     <div class="chart-card wide">
       <div class="chart-title">Evolución de Avance Mensual</div>
-      <div class="chart-sub">Promedio de avance reportado · Enero → Marzo</div>
-      <div class="chart-wrap" style="height:200px">
+      <div class="chart-sub">% Real vs Esperado · evolución mes a mes</div>
+      <div class="chart-wrap" style="height:240px">
         <canvas id="chartMensual"></canvas>
       </div>
     </div>
 
-    <!-- Progreso por equipo -->
-    <div class="chart-card">
-      <div class="chart-title">% Avance por Equipo</div>
-      <div class="chart-sub">Último avance reportado por equipo</div>
-      <div class="progress-list" id="progressList"></div>
+    <!-- Radar de Atención (compacto) -->
+    <div class="chart-card" style="display:flex; flex-direction:column;">
+      <div class="chart-title">Radar de Atención</div>
+      <div class="chart-sub">Desafíos que requieren acción a la fecha de corte</div>
+      <div class="radar-list" id="radarList"></div>
     </div>
 
   </div>
@@ -417,6 +1034,13 @@
     <div class="chart-title">Desafíos por Gerencia</div>
     <div class="chart-sub">Distribución de carga y estado de avance por gerencia responsable</div>
     <div id="gerenciaScorecard" style="display:flex; flex-direction:column; gap:16px; margin-top:8px;"></div>
+  </div>
+
+  <!-- ══ CARGA POR LÍDER ══ -->
+  <div class="chart-card" style="margin-bottom:24px; grid-column:span 3;">
+    <div class="chart-title">Carga por Líder</div>
+    <div class="chart-sub">Distribución de desafíos por líder responsable, ordenado por carga</div>
+    <div id="liderPanel" class="lider-panel"></div>
   </div>
 
   <!-- Table -->
@@ -429,9 +1053,10 @@
       <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
         <button class="filter-btn active" data-estado="Todos" onclick="filterTable('Todos', this)">Todos</button>
         <button class="filter-btn" data-estado="Completado" onclick="filterTable('Completado', this)" style="display:none">Completados</button>
-        <button class="filter-btn" data-estado="Desarrollo" onclick="filterTable('Desarrollo', this)" style="display:none">En Desarrollo</button>
-        <button class="filter-btn" data-estado="Atrasado"   onclick="filterTable('Atrasado', this)"   style="display:none">Atrasados</button>
-        <button class="filter-btn" data-estado="No aplica"  onclick="filterTable('No aplica', this)"  style="display:none">No Aplica</button>
+        <button class="filter-btn" data-estado="En desarrollo" onclick="filterTable('En desarrollo', this)" style="display:none">En desarrollo</button>
+        <button class="filter-btn" data-estado="Atrasado" onclick="filterTable('Atrasado', this)" style="display:none">Atrasados</button>
+        <button class="filter-btn" data-estado="Sin reporte" onclick="filterTable('Sin reporte', this)" style="display:none">Sin reporte</button>
+        <button class="filter-btn" data-estado="Planificado" onclick="filterTable('Planificado', this)" style="display:none">Planificados</button>
         <div style="width:1px; height:16px; background:var(--border); margin:0 2px;"></div>
         <div style="position:relative; display:flex; align-items:center;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -453,6 +1078,7 @@
         </div>
       </div>
     </div>
+    <div id="breadcrumb-container" class="breadcrumb-container" style="display:none;"></div>
     <div style="overflow-x:auto">
       <table id="mainTable">
         <thead>
@@ -460,9 +1086,9 @@
             <th>Código</th>
             <th>Nombre Desafío</th>
             <th>Equipo</th>
-            <th>Líder</th>
+            <th>Fecha Fin</th>
             <th>Estado</th>
-            <th>Avance Marzo</th>
+            <th>Avance acumulado</th>
             <th style="text-align:center">Comité</th>
           </tr>
         </thead>
@@ -472,27 +1098,22 @@
   </div>
 
   <footer>
-    Dashboard generado con datos al cierre de Marzo 2026 · Gerencia de Control Tecnológico
+    Dashboard generado con datos al cierre de Abril 2026 · Gerencia de Control Tecnológico
   </footer>
 
 </div>
 
 <script>
-const DATA = [{"codigo": "D26-20", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "Restructurar Proceso de parchado, disminuir HH en procesos de actualización.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-21", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de virtual patch, para aumentar cobertura de servidores producción con el fin de disminuir cantidad de mantenciones de servidores de producción debido a vulnerabilidades que deben ser mitigadas mediante parches de actualización.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-22", "equipo": "Equipo MET", "lider": "Luis Caris", "nombre": "Disminuir tiempo de generación de entregables de auditorias del gestión", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-23", "equipo": "Arquitectura", "lider": "Luis Sanzana", "nombre": "Evaluación Github Copilot", "estado": "Completado", "gerencia": "Procesos de Inversiones", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-24", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "nombre": "Implementar una nueva metodología de medición de productividad y control de desarrollo", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-38", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "nombre": "Democratización IA en equipos usuarios, prueba piloto", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "avance_enero": 60, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-39", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "nombre": "Democratización IA en equipos usuarios, herramienta definitiva", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "avance_enero": 20, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-150", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Renovación de nuevos firewalls de borde con equipos carrier class que nos ofrece un 200% más de potencia y adicionalmente permite virtualización de firewall.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-151", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de telefonia para migrar el cisco call manager, adicionalmente que ofresca omnicalidad de comunicación como son whatsapp", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-152", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de correo electrónico que permitan mejorar la seguridad, administración y gestión del correo interno.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-153", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Aumento de capacidad de Storages sites Lidice y Panamericana.", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-154", "equipo": "Transversales", "lider": "Jovan Lausic", "nombre": "Migración Chronus 2.0", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-155", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "nombre": "Panel Centralizado de Gasto Tecnologico (plan Nexus)", "estado": "No aplica", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-156", "equipo": "MET", "lider": "Luis Caris", "nombre": "Implementar plataforma Cloud Native basada en Kubernetes (Cluster Linux) para los entornos de Desarrollo, Test y Producción, incluyendo persistencia basada en NFS.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-157", "equipo": "MET", "lider": "Luis Caris", "nombre": "Implementar plataforma de control de versión de código basada en GIT como reemplazo de SVN.", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-158", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "Desafio Migración Origins", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-159", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "nombre": "implementacion Nueva definicion perfilamiento web. (Web Filter)", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-160", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de virtualización y contenerización para mitigar el aumento de costos de vmware", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-161", "equipo": "Base de datos", "lider": "Víctor Reyes", "nombre": "Migración de servidores de BD MSSQLServer a versión 2022", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-162", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluación de nueva solución de respaldo de datos historicos, que nos permita mitigar los costos de la alza de precios por la crisis de escases de almacenamiento electronico", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-163", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Mejorar las capacidades de la red Hendaya considerando el aumento de la presencialidad de la compañía", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-164", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Respaldos de BBDD SQL Server con Veeam", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-165", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Respaldos de BBDD PostgreSQL con Veeam", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-166", "equipo": "Bases de datos", "lider": "Víctor Reyes", "nombre": "Definir servidor para alojar base de datos Gitlab y definirlo como Infraestructura", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-167", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "Centralizar claves admin en EETT", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-168", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "La curva", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-169", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "nombre": "La curva", "estado": "Desarrollo", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-170", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "nombre": "Evaluar soluciones de Virtualización de maquinas virtuales que nos ayuden a salir del proveedor VmWare por tema de costos, o buscar alternativas viables de combinación de productos.", "estado": "No aplica", "gerencia": "Plataforma y Control Tecnológico", "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null}, {"codigo": "D26-171", "equipo": "Arquitectura", "lider": "Eli Lovera", "nombre": "Nueva Gestor Documental", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}, {"codigo": "D26-172", "equipo": "Arquitectura", "lider": "Eli Lovera", "nombre": "Multi Captcha", "estado": "Desarrollo", "gerencia": "Procesos de Inversiones", "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null}];
+const DATA = [{"codigo": "D26-20", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Restructurar Proceso de parchado, disminuir HH en procesos de actualización.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-21", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Evaluar soluciones de virtual patch, para aumentar cobertura de servidores producción con el fin de disminuir cantidad de mantenciones de servidores de producción debido a vulnerabilidades que deben ser mitigadas mediante parches de actualización.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-22", "equipo": "MET", "lider": "Luis Caris", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Disminuir tiempo de generación de entregables de auditorias del gestión", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-23", "equipo": "Arquitectura", "lider": "Luis Sanzana", "fecha_fin": "31/03/2026", "fecha_inicio": "01/01/2026", "nombre": "Evaluación Github Copilot", "estado": "Completado", "gerencia": "Procesos de Inversiones", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "Sí"}, {"codigo": "D26-24", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Implementar una nueva metodología de medición de productividad y control de desarrollo", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-38", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "fecha_fin": "27/02/2026", "fecha_inicio": "01/01/2026", "nombre": "Democratización IA en equipos usuarios, prueba piloto", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "cuatrimestre": 1, "avance_enero": 60, "avance_febrero": 100, "avance_marzo": null, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 80, "comite": "Sí"}, {"codigo": "D26-39", "equipo": "Tecnologia Productos", "lider": "Esteban Arredondo", "fecha_fin": "24/04/2026", "fecha_inicio": "01/02/2026", "nombre": "Democratización IA en equipos usuarios, herramienta definitiva", "estado": "Completado", "gerencia": "Gerencia de Operaciones", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": 100, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "Sí"}, {"codigo": "D26-150", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "31/03/2026", "fecha_inicio": "01/01/2026", "nombre": "Renovación de nuevos firewalls de borde con equipos carrier class que nos ofrece un 200% más de potencia y adicionalmente permite virtualización de firewall.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "Sí"}, {"codigo": "D26-151", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Evaluar soluciones de telefonia para migrar el cisco call manager, adicionalmente que ofresca omnicalidad de comunicación como son whatsapp", "estado": "Atrasado", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": 90, "avance_objetivo": 90, "cumplimiento_plan": 98, "comite": "No"}, {"codigo": "D26-152", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Evaluar soluciones de correo electrónico que permitan mejorar la seguridad, administración y gestión del correo interno.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "Sí"}, {"codigo": "D26-153", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Aumento de capacidad de Storages sites Lidice y Panamericana.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "Sí"}, {"codigo": "D26-154", "equipo": "Transversales", "lider": "Jovan Lausic", "fecha_fin": "30/06/2026", "fecha_inicio": "01/01/2026", "nombre": "Migración Chronus 2.0", "estado": "Sin reporte", "gerencia": "Procesos de Inversiones", "cuatrimestre": 2, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-155", "equipo": "Control de Gestión TI", "lider": "Luis Caris", "fecha_fin": "30/08/2026", "fecha_inicio": "01/05/2026", "nombre": "Panel Centralizado de Gasto Tecnologico (plan Nexus)", "estado": "Planificado", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 2, "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null, "avance_objetivo": 0, "cumplimiento_plan": null, "comite": "No"}, {"codigo": "D26-156", "equipo": "MET", "lider": "Luis Caris", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Implementar plataforma Cloud Native basada en Kubernetes (Cluster Linux) para los entornos de Desarrollo, Test y Producción, incluyendo persistencia basada en NFS.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-157", "equipo": "MET", "lider": "Luis Caris", "fecha_fin": "30/04/2026", "fecha_inicio": "01/02/2026", "nombre": "Implementar plataforma de control de versión de código basada en GIT como reemplazo de SVN.", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-158", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "fecha_fin": "30/06/2026", "fecha_inicio": "01/03/2026", "nombre": "Desafio Migración Origins", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 2, "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-159", "equipo": "Ciberseguridad", "lider": "Felipe Acosta", "fecha_fin": "30/04/2026", "fecha_inicio": "01/02/2026", "nombre": "implementacion Nueva definicion perfilamiento web. (Web Filter)", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": 100, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-160", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Evaluar soluciones de virtualización y contenerización para mitigar el aumento de costos de vmware", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "Sí"}, {"codigo": "D26-161", "equipo": "Base de datos", "lider": "Víctor Reyes", "fecha_fin": "31/12/2026", "fecha_inicio": "01/01/2026", "nombre": "Migración de servidores de BD MSSQLServer a versión 2022", "estado": "Atrasado", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 3, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": 50, "avance_objetivo": 50, "cumplimiento_plan": 88, "comite": "No"}, {"codigo": "D26-162", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Evaluación de nueva solución de respaldo de datos historicos, que nos permita mitigar los costos de la alza de precios por la crisis de escases de almacenamiento electronico", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-163", "equipo": "Innovación y Comunicaciones", "lider": "Carlos Contreras", "fecha_fin": "30/06/2026", "fecha_inicio": "01/01/2026", "nombre": "Mejorar las capacidades de la red Hendaya considerando el aumento de la presencialidad de la compañía", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 2, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-164", "equipo": "Base de datos", "lider": "Víctor Reyes", "fecha_fin": "31/07/2026", "fecha_inicio": "01/03/2026", "nombre": "Respaldos de BBDD SQL Server con Veeam", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 2, "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-165", "equipo": "Base de datos", "lider": "Víctor Reyes", "fecha_fin": "31/07/2026", "fecha_inicio": "01/04/2026", "nombre": "Respaldos de BBDD PostgreSQL con Veeam", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 2, "avance_enero": null, "avance_febrero": null, "avance_marzo": null, "avance_abril": null, "avance_objetivo": 0, "cumplimiento_plan": null, "comite": "No"}, {"codigo": "D26-166", "equipo": "Base de datos", "lider": "Víctor Reyes", "fecha_fin": "31/03/2026", "fecha_inicio": "01/03/2026", "nombre": "Definir servidor para alojar base de datos Gitlab y definirlo como Infraestructura", "estado": "Completado", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-167", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "fecha_fin": "30/04/2026", "fecha_inicio": "01/03/2026", "nombre": "Centralizar claves admin en EETT", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-168", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "fecha_fin": "30/04/2026", "fecha_inicio": "01/02/2026", "nombre": "La curva", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-169", "equipo": "Mesa de Ayuda", "lider": "Mario Salinas", "fecha_fin": "30/04/2026", "fecha_inicio": "01/03/2026", "nombre": "La curva", "estado": "Sin reporte", "gerencia": "Plataforma y Control Tecnológico", "cuatrimestre": 1, "avance_enero": null, "avance_febrero": null, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-171", "equipo": "Arquitectura", "lider": "Eli Lovera", "fecha_fin": "31/05/2026", "fecha_inicio": "01/01/2026", "nombre": "Nueva Gestor Documental", "estado": "Sin reporte", "gerencia": "Procesos de Inversiones", "cuatrimestre": 2, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}, {"codigo": "D26-172", "equipo": "Arquitectura", "lider": "Eli Lovera", "fecha_fin": "30/04/2026", "fecha_inicio": "01/01/2026", "nombre": "Multi Captcha", "estado": "Sin reporte", "gerencia": "Procesos de Inversiones", "cuatrimestre": 1, "avance_enero": 100, "avance_febrero": 100, "avance_marzo": 100, "avance_abril": null, "avance_objetivo": 100, "cumplimiento_plan": 100, "comite": "No"}];
+const TOOLTIP_DATA = {"D26-20": {"lider": "Felipe Acosta", "descripcion": "Abordar problematicas del aumento de parches por amenazas de dia cero, clasificación y tratamiento x tipos de actualizaciones (S.O., hypervisor, app 3ros, drivers, etc).", "indicador": "Proceso de parchado definido.Ahorro estimado de HH, 10HH por ejecución, 1 semestral, ahorro anual 20HH.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Levantamiento de Proceso", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Levantamiento de Proceso", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Definición del nuevo proceso ", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Definición del nuevo proceso ", "avance": null}]}, "D26-21": {"lider": "Carlos Contreras", "descripcion": "Evaluar soluciones para aumentar cobertura de virtual patch para disminuir mantenciones por procesos de parchado", "indicador": "Evaluación de solución de virtual patch completada", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Investigacion de mercado", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Evaluación de soluciones con servicios internos", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Evaluación de soluciones con servicios internos", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados de evaluación a Comité", "avance": null}]}, "D26-22": {"lider": "Luis Caris", "descripcion": "Mejorar proceso de generación de evidencias de auditorias, mediante el desarrollo de una herramienta que permita generar trazabilidad de cualquier pieza de SW", "indicador": "El equipo de producción TI se ahorrara 45 HH durante el proceso de auditoria  y adicionalmente el equipo de Gestión TI ahorrara 6 HH Mensuales.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Analisis del proceso actual", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Construcción de herramienta", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Construcción de herramienta", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Implementación de herramienta y marcha blanca", "avance": null}]}, "D26-23": {"lider": "Luis Sanzana", "descripcion": "Validar nivel de reducción de tiempos de desarrollo por apoyo de IA para lo cual se trabajará con dos equipos de proyectos, los equipos usaran Github Copilot habitualmente y además se someterán al  desarrollo de componentes estandarizados para medir correctamente el grado de eficiencia.", "indicador": "Medir el nivel de productividad que pueden alcanzar los equipos utilizando la IA como asistente versus equipos desarrollando lo mismo pero sin la IA, Confirmar mediante las métricas de Github que las sugerencias de código son al menos un 60% aceptadas", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Desarrollo Piloto", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Avance preliminar de resultados", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Resultados y conclusiones.", "avance": 100}]}, "D26-24": {"lider": "Luis Caris", "descripcion": "Mejorar proceso actual, implementando mediciones con indicadores DORA", "indicador": "Proceso implementado y primera medición en Abril de 2026", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Levantamiento de los origines de datos 31-01-2026", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Definir en detalle metodología de medición (28-02-2026)", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Primera medición", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Primer informe al comité de tecnología", "avance": null}]}, "D26-38": {"lider": "Esteban Arredondo", "descripcion": "Dado que comenzamos en enero la prueba piloto con copilot aproximadamente con 45 usuarios, la idea es mostrar los resultados obtenidos, aprendizajes, nivel de adopción y principales casos de uso identificados.", "indicador": "• ≥70% de usuarios utilizando la herramienta\n• Identificación de al menos 2 casos de uso relevantes por equipo", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Prueba de concepto con usuarios", "avance": 60}, {"mes": "Febrero", "mes_num": 2, "actividad": "analisis de resultados, metricas y kpi", "avance": 100}]}, "D26-39": {"lider": "Esteban Arredondo", "descripcion": "En base a los resultados de la prueba piloto, se busca definir la herramienta definitiva de IA a escalar, estableciendo lineamientos de uso, modelo de soporte, consideraciones de seguridad y un plan de despliegue progresivo para los equipos usuarios.", "indicador": "• Herramienta de IA seleccionada y aprobada por comité\n• Lineamientos de uso, gobernanza y seguridad definidos", "hitos": [{"mes": "Febrero", "mes_num": 2, "actividad": "analisis de herramientas disponibles en el mercado", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "presentación herramienta en comité", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "escalar a toda la empresa", "avance": 100}]}, "D26-150": {"lider": "Carlos Contreras", "descripcion": "Se compraron 2 equipos Fortigate 900G que reemplazaran los actuales 600E que ofrecen mayor potencia, que permite el ahorro de costo en equipos y licenciamiento con un ahorro aproximado de 43% por la adquisión a 5 años.", "indicador": "Equipos instalados y operando en los 2 sites.\nEs una renovación tecnológica por obsolescencia (se tiene que hacer si o si), En vez de comprar 4 equipos de firewalls solo se requirieron 2 por la potencia muy superior de los adquiridos, esto sse traduce en un ahorro de 109.565.512 en 5 años.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Esperando llegada de equipo", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Configuración de equipo que tendra configuración actual y adicionalmente se instalara firmware version 7.4.x", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Instalación y operación de firewall en ambos sites", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados de evaluación a Comité", "avance": null}]}, "D26-151": {"lider": "Carlos Contreras", "descripcion": "Evaluar soluciones que nos ofrescan servicios similares a lo que tenemos, omnicalidad de servicios y adicionales como video llamadas como extra.", "indicador": "Evaluación de solución de servicio de telefonía completada.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Investigacion de mercado", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Evaluación de soluciones con servicios", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Evaluación de solciones con pruebas practicas", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados de evaluación a Comité", "avance": 90}]}, "D26-152": {"lider": "Carlos Contreras", "descripcion": "Evaluar soluciones que incluyan protección contra spam y phishing, filtrado avanzado de amenazas, cifrado de correos, continuidad del servicio, facilidad de administración y soporte profesional.", "indicador": "Evaluación de solución de servicio de virtualización completada.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Investigacion de mercado", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Evaluación de soluciones con servicios internos", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Evaluación de soluciones con servicios internos", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados de evaluación a Comité", "avance": null}]}, "D26-153": {"lider": "Carlos Contreras", "descripcion": "El aumento del storage es en base a una estrategia de ahorro de costo y mejoras de respaldo, ya que los storage principales IBM quedaran con su maxima capacidad, lo que permitira ambientes bajos, y storages medios quedaran para respaldo.", "indicador": "Aumento total de capacidad de los storages en ambos sites homologados al mismo tamaño. La renovación se tenia que dar si o si, existía un presupuesto de $80.682.000 y tomado la opción de este desafío se pretende ahorrar $35.000.000.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Esperando llegada de los SSD", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Instalación y aumento de capacidad en storages (IBM y Pentavada) - Lidice", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Instalación y aumento de capacidad en storages (IBM y Pentivada) - Panamericana", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados de evaluación a Comité", "avance": null}]}, "D26-154": {"lider": "Jovan Lausic", "descripcion": "Gestionar con equipos de proyectos TI la migracion de todos los procesos por lotes que habitan en Chronus 1.0 para que sean migrados a Chronus 2.0", "indicador": "1. Totalidad de los job chronus (de tipo aplicación) que estan en servidor Chronus 1.0 movidos a los servidores de Chronus 2.0.\n2. Baja de los servidores de Chronus 1.0 a excepcion de CLSASQLP11", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Linea Inversiones\nLinea Canales \ncon sus jobs exe migrados a su nodo .NET correspondiente", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Linea RRVV\nLinea MET\nLinea Negocios IA\ncon sus jobs exe migrados a ese nodo .NET Correspondiente", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": " Linea de Creditos migrados a su nodo .NET Correspondiente", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Linea FNZ migrados a su nodo .NET Correspondiente", "avance": null}, {"mes": "Mayo", "mes_num": 5, "actividad": " Linea GOB/ Renta Inmobiliaria\nLinea Transversal y  Gestion Corporativa migrados a su nodo .NET correspondiente", "avance": null}, {"mes": "Junio", "mes_num": 6, "actividad": "Linea SSVV y resagados si hubieron alguno no identificados , migrados en su linea nodo .NET Correspondiente", "avance": null}, {"mes": "Julio", "mes_num": 7, "actividad": " ", "avance": null}]}, "D26-155": {"lider": "Luis Caris", "descripcion": "Unificar los controles de costos de Infraestructura y TI para optimizar la gestión financiera y facilitar decisiones estratégicas.", "indicador": "Disponibilizar un dashboard con una mirada estrategica de los gastos tecnologicos de la compañía.", "hitos": [{"mes": "Mayo", "mes_num": 5, "actividad": "Definición del objetivo estratégico del panel", "avance": null}, {"mes": "Junio", "mes_num": 6, "actividad": "Modelo de datos y fuentes de información", "avance": null}, {"mes": "Julio", "mes_num": 7, "actividad": "Definición de métricas y estructura del dashboard", "avance": null}, {"mes": "Agosto", "mes_num": 8, "actividad": "Construcción del dashboard y presentación de resultados en comité", "avance": null}, {"mes": "Septiembre", "mes_num": 9, "actividad": " ", "avance": null}]}, "D26-156": {"lider": "Luis Caris", "descripcion": "Diseñar, desplegar y dejar operativa una plataforma Kubernetes basada en Linux para soportar aplicaciones cloud native de la compañía.\nEl desafío considera la preparación de los clústeres para los ambientes de Desarrollo, Test y Producción, la implementación del mecanismo de persistencia basado en NFS.", "indicador": "Cluster Kubernetes Linux operativo en DESA, TEST y PROD\nPlataforma de persistencia NFS operativa e integrada al cluster\nDocumentación técnica base de la plataforma", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Preparación y despliegue del cluster Kubernetes Linux entorno POC, incluyendo configuración base de nodos, red de pods y componentes fundamentales de la plataforma.", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Implementación de plataforma de persistencia NFS para Kubernetes POC e integración con el cluster para pruebas de almacenamiento persistente.\n\nPruebas de despliegue de aplicaciones en entorno POC y validación de uso de persistencia NFS.", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Preparación e implementación del cluster Kubernetes Linux entorno DESA.\n\nPreparación e implementación del cluster Kubernetes Linux entorno TEST.\n\nPreparación e implementación del cluster Kubernetes Linux entorno PROD.\n\nImplementación de plataforma NFS para entorno DESA y validación de persistencia.\n\nImplementación de plataforma NFS para entorno TEST y validación de persistencia.\n\nImplementación de plataforma NFS para entorno PROD y validación de persistencia.", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Validación de despliegue de cluster\n\nImplementación de monitoreo para el entorno por cada ambiente.", "avance": null}]}, "D26-157": {"lider": "Luis Caris", "descripcion": "Desplegar y configurar de manera autophospedada la herramienta GitLab para modernizar el control de versionamiento del código de los sistemas de la compañía para mejorar la gobernanza del código.", "indicador": "-Plataforma GitLab en producción.\n-Repositorios MET en GitLab\n-Capacitaciones a equipos de desarrollo", "hitos": [{"mes": "Febrero", "mes_num": 2, "actividad": "Configurar y probar plataforma Gitlab", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Despliegue plataforma en ambiente productivo y migración de repositorios de MET", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Capacitaciones  a  equipos de desarrollo sobre uso de la plataforma y oficialización de uso de Git y Gitlab como repositorio  oficial de la compañía para los sistemas nuevos.", "avance": null}]}, "D26-158": {"lider": "Felipe Acosta", "descripcion": "Optimizar los flujos de trabajo actuales a través de la automatización de procesos críticos, con el fin de minimizar la intervención manual, acelerar los tiempos de respuesta y garantizar la escalabilidad operativa del área", "indicador": "Proceso de analisis de vulnerabilidades automatizado. 2 procesos:\nCuadratura AV vs Inventario\nAnalasis de vulnerabilidades", "hitos": [{"mes": "Marzo", "mes_num": 3, "actividad": "Identificacion de procesos manuales", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Factibilidad de automatizacion", "avance": null}, {"mes": "Mayo", "mes_num": 5, "actividad": "pruebas de concepto", "avance": null}, {"mes": "Junio", "mes_num": 6, "actividad": "Proceso automatizado", "avance": null}]}, "D26-159": {"lider": "Felipe Acosta", "descripcion": "contar con un perfilamiento web renovado. Que reduzca la labor operativa de los actuales perfiles. Pensando en la productividad y la seguridad.", "indicador": "Perfilamiento web oficializado en perfil informatico, ahorro estimado de 4 hh mensuales, ahorro anual 48HH.", "hitos": [{"mes": "Febrero", "mes_num": 2, "actividad": "redificion de perfiles", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "preparacion de la herramientas con las nuevas definiciones y grupos", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Puesta en marcha de nuevos perfiles.", "avance": 100}]}, "D26-160": {"lider": "Carlos Contreras", "descripcion": "Abordar la crisis del incremento de costos de la virtualización, definiendo la solución mas adecuada para la compañía.", "indicador": "Definir nueva solución", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Evaluación de alternativas vmware", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Evaluación de alternativas vmware", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Evaluación de alternativas vmware", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados evaluación en comité", "avance": null}]}, "D26-161": {"lider": "Víctor Reyes", "descripcion": "Este plan debe ser coordinado con equipo de Desarrollo", "indicador": "Migrar motores de BD SQL Server a SQL2022", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Pruebas Servidor de Reporte", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Paso a producción servidor de reporte", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Implementación de testing de 2 servidores de BD", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Migración de 2 servidores de BD.", "avance": 50}]}, "D26-162": {"lider": "Carlos Contreras", "descripcion": "Analizar y optimizar politicas de respaldos de bases de datos, servidores virtuales y Files Servers, con el fin de disminuir la utilización del almacenamiento de respaldos de datos y disminuir costos de inversión en las proximas renovación de hardware de backup.\nEvaluar y recomendar soluciones de respaldos existentes en el mercado, ya sea en modo \"On premises\" como en \"Cloud\".", "indicador": "Evaluar solución a un costo similar al  de la actual (aprox US$260.000 + iva)", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Evaluación de soluciones ", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Evaluación de soluciones ", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Evaluación de soluciones ", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Presentar resultados evaluación en comité", "avance": null}]}, "D26-163": {"lider": "Carlos Contreras", "descripcion": "Continuar desde plan Avanza, debido al retraso en la llegada de los equipos Core, estamos en proceso de definición de reemplazar el HW adquirido por otra marca", "indicador": "Equipos Core de comunicaciones implementados. (Segpun lo conversado con Carlos el indicador de logro debe llegar hasta la implementación).", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Espera de llegada de equipos", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Espera de llegada de equipos", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Evaluación de alternativas de Core", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Evaluación de alternativas de Core", "avance": null}, {"mes": "Mayo", "mes_num": 5, "actividad": "Implementación de equipos en Producción", "avance": null}, {"mes": "Junio", "mes_num": 6, "actividad": "Implementación de equipos en Producción", "avance": null}]}, "D26-164": {"lider": "Víctor Reyes", "descripcion": "Implementar respaldos de bases de datos SQL Server con la herramienta Veeam Bckup, de manera de reemplazar la herramienta existente Idera", "indicador": "Consolidar una plataforma para respaldo de bases de datos, debido a las restricciones de licencia que actualemnte tenemos con Idera, la que solamenmte nos permite respaldar 16 servidores de SQL Server", "hitos": [{"mes": "Marzo", "mes_num": 3, "actividad": "Validaciones ambiente de Desarrollo y Testing realizadas correctamente.", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Respaldar los siguientes servidores:\nCLSASQLCBP01\nCLSASQLP16\nCLSASQLINFP01\nCLSASQLP33\nCLSASQLP37\nCLSASQLRSP01", "avance": null}, {"mes": "Mayo", "mes_num": 5, "actividad": "Respaldar los siguientes servidores:\nCLSASQLP04\nCLSASQLCONGES02\nCLSASQLCONGES02\\CUMPLIMIENTO\nCLSASQLWP02\nCLSACONGES2019\nCLSASQLP23\nCLSASQLP35", "avance": null}, {"mes": "Junio", "mes_num": 6, "actividad": "Respaldar los siguientes servidores:\nCLSASQLCONGES\nCLSASQLP11\nCLSASQLWP01\nCLSASQLP32\nCLSASQLSSISP01\nCLSASQLP01\nCLSASQLP042019\nCLSASQLP22", "avance": null}, {"mes": "Julio", "mes_num": 7, "actividad": "Respaldar los siguientes servidores:\nCLSASQLP24\nCLSASCP01N01\nCLSASCP01N02\nCLSASQLP03\nCLSASQLP21\nCLSASQLP30\nCLSASQLP242019\nCLSASQLWP012019", "avance": null}]}, "D26-165": {"lider": "Víctor Reyes", "descripcion": "Implementar respaldos de bases de datos SQL Server con la herramienta Veeam Bckup. Actualmente los respaldos se hacer de forma nativa", "indicador": "Utilizar la herramienta actuial Veeam Backup para respaldar las bases de datos de los motores PostgreSQL.", "hitos": [{"mes": "Abril", "mes_num": 4, "actividad": "Validaciones ambiente de Desarrollo y Testing", "avance": null}, {"mes": "Mayo", "mes_num": 5, "actividad": "Respaldar los siguientes servidores:\nCLSAATLPGRP02\nclsadsecbdp02\nCLSAPGMIDP01\nCLSAPGPEP01\nCLSAPGPORTSP01\nCLSAPGRMINEP01", "avance": null}, {"mes": "Junio", "mes_num": 6, "actividad": "Respaldar los siguientes servidores:\nCLSAATLPGRP01\nCLSAENVISPGP01\nCLSAPGSIGNRP01\nCLSAPGWMP01\nCLSAPGWSP01", "avance": null}, {"mes": "Julio", "mes_num": 7, "actividad": "Respaldar los siguientes servidores:\nCLSAATLPGP01\nCLSAATLPGP02\nCLSAPGPORTMP01\nCLSAPGSIGNP01\nCLSAPGWP03\nCLSAPGWP04\n", "avance": null}]}, "D26-166": {"lider": "Víctor Reyes", "descripcion": "Surge la necesidad de tener un servidor de base de datos PostgreSQL destinado a alojar bases de datos internas de la compañía, separadas de las bases de negocio, con el objetivo de no mezclar mantenciones ni cargas adicionales a uno u otro ambiente.", "indicador": "Definir y configurar servidor PostgreSQL destinado solamente a hospedar bases de datos de internas de Pentavida. Con esto, se evitará a futuro mezclar bases de datos de Infraestructura interna con bases de datos de negocio. Szervidor deberá utilizar PgBouncer.", "hitos": [{"mes": "Marzo", "mes_num": 3, "actividad": "Termino de actividad. \n1. Definición Servidor\n2. Parchado PostgreSQL e instalación PgBouncer\n3. Actividad terminada y validad por desarrollador\n4. Resumen interno de actividad\n", "avance": 100}]}, "D26-167": {"lider": "Mario Salinas", "descripcion": "Administrar las claves de administrador de equipos a traves de herramienta LAPS, de forma centralizada y segura", "indicador": "Administración de claves centralizada desde servidor", "hitos": [{"mes": "Marzo", "mes_num": 3, "actividad": "1. Reuniones de coordinacion con area de Innovación", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "1. Habilitación de ambiente de pruebas (Laboratorio) - Innovación\n2. Configuración de LAPS en domain controller - Innovación\n3. Configuracion GPO - M.Salinas\n4. Realizar pruebas en equipos de test - M.Salinas\n5. Replicar la configuración de AD en Producción - Innovación\n6. Configuración de politicas de expiración -  M.Salinas\n7. Pruebas en equipos piloto -  M.Salinas\n8. Aprobación y validación - Seguridad\n9. Pruebas finales y puesta en marcha EETT", "avance": null}]}, "D26-168": {"lider": "Mario Salinas", "descripcion": "Implementar interface de autoconsulta de inventarios", "indicador": "Reducción de HH por concepto de generación de informes, 4 horas mensuales.", "hitos": [{"mes": "Febrero", "mes_num": 2, "actividad": "1. Desarrollo de interface en excel", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "1. Desarrollo de aplicación equipo MET\n2. Implementación de mejoras/funcionalidades al sistema\n3. Pruebas de funcionamiento", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "1. Instalacion y configuración a usuarios piloto\n2. Pruebas de funcionamiento\n3. Depuración\n4. Implementación final", "avance": null}]}, "D26-169": {"lider": "Mario Salinas", "descripcion": "Implementar parchado de drivers via Patch Manager", "indicador": "Reduccón de HH por concepto de actualizaciones manuales. 20 min * 410 equipos = 4200 min --> 70 HH", "hitos": [{"mes": "Marzo", "mes_num": 3, "actividad": "1. Adquisición/upgrade de licencia Patch Manager Enterprise\n2. Actualización de drivers/BIOS a equipos piloto\n3. Monitoreo del proceso", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "1. Crear tareas de despliegue por modelo de equipo\n2. Actualización de drivers/BIOS a equipos finales\n3. Monitoreo del proceso", "avance": null}]}, "D26-171": {"lider": "Eli Lovera", "descripcion": "Diseño, implementacion y despliegue de nuevo Gestor documental para reemplazar progresivamente Alfresco.", "indicador": "1. Habilitación productiva de la nueva plataforma.\n2. Guia de proceso de migración para Sistemas que estan integrados a Alfresco.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Diseño Conceptual de la plataforma", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Implementación MVP", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Presentación avance en Comité y breve Demostración.\nDesplegar en ambiente de Desarrollo. (Infra)\nDesplegar en ambinete de Test (Infra)\nHabilitación en ambiente de Test para las distintas lineas tecnologicas.\nGeneración de guía de proceso de migración a la nueva plataforma.", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Pruebas internas en ambiente de test.\nPlan Implementación de herramienta.\nDesplegar en ambiente de Produccion\n", "avance": null}, {"mes": "Mayo", "mes_num": 5, "actividad": "Inicio de plan de Integración de las distintas lineas tecnologicas", "avance": null}]}, "D26-172": {"lider": "Eli Lovera", "descripcion": "Diseño, implementacion y despliegue de nuevo gestor de captchas en la compañía que permita habilitar uno u otro según las condiciones tecnicas del momento.", "indicador": "1. Habilitación productiva de la nueva plataforma.\n2. Guia de proceso de migración para Sistemas que estan integrados a Cloudflare Turnstile o Google Recaptcha.", "hitos": [{"mes": "Enero", "mes_num": 1, "actividad": "Desarrollo realizado realizado por Arquitectura  y entregado a seguridad para su revisión", "avance": 100}, {"mes": "Febrero", "mes_num": 2, "actividad": "Contenerizado por El equipo de MET en ambiente de POC", "avance": 100}, {"mes": "Marzo", "mes_num": 3, "actividad": "Desplegar en los 3 ambientes \nPlan de integración con las diferentes Lineas Tecnologicas (Arquitectura)", "avance": 100}, {"mes": "Abril", "mes_num": 4, "actividad": "Plan de integración con las diferentes Lineas Tecnologicas (Arquitectura)", "avance": null}]}};
 
 // ── Normalize equipo names + Comité logic ──
 DATA.forEach(d => {
   d.equipo = d.equipo.replace(/\n.*/,'').trim();
   if (d.equipo === 'Equipo MET') d.equipo = 'MET';
   if (d.equipo === 'Base de datos' || d.equipo === 'Bases de datos') d.equipo = 'Bases de datos';
-  // Calcular avance_total = último avance reportado no nulo
-  const avances = [d.avance_enero, d.avance_febrero, d.avance_marzo, d.avance_abril ?? null];
-  d.avance_total = null;
-  for (const v of avances) {
-    if (v !== null && v !== undefined) d.avance_total = v;
-  }
-  // Comité: Sí si está Completado, No para el resto
-  d.comite = d.estado === 'Completado' ? 'Sí' : 'No';
+  // avance_total ahora viene del campo avance_objetivo calculado en el Excel
+  d.avance_total = d.avance_objetivo;
   // Gerencia normalizada
   d.gerencia = (d.gerencia || '').split('\n')[0].trim() || 'Sin Gerencia';
 });
@@ -504,14 +1125,16 @@ let activeFilter   = null;
 let activeGerencia = null;
 let activeEquipo   = null;
 
-const ESTADO_COLORS = {
+const ESTADO_COLOR_MAP = {
   'Completado':  '#00e676',
   'Desarrollo':  '#ffd600',
+  'Planificado': '#8b949e',
   'Atrasado':    '#ff5252',
   'No aplica':   '#8b949e',
 };
-const ESTADO_LABELS = ['Completado', 'En Desarrollo', 'Atrasado', 'N/A'];
-const ESTADO_KEYS   = ['Completado', 'Desarrollo',    'Atrasado', 'No aplica'];
+const ESTADO_LABELS = ['Completado', 'En desarrollo', 'Atrasado', 'Sin reporte', 'Planificado'];
+const ESTADO_KEYS   = ['Completado', 'En desarrollo', 'Atrasado', 'Sin reporte', 'Planificado'];
+const ESTADO_COLORS = ['#00f2ff',    '#00e676',       '#ff5252',  '#ff9800',     '#8b949e'];
 
 function getFiltered() {
   let subset = DATA;
@@ -552,7 +1175,7 @@ const donutChart = new Chart(document.getElementById('chartEstado'), {
         const count = DATA.filter(d=>d.estado===k).length;
         return count === 0 ? 0.0001 : count; // epsilon para que la leyenda siempre aparezca
       }),
-      backgroundColor: ['#00e676','#ffd600','#ff5252','#8b949e'],
+      backgroundColor: ESTADO_COLORS,
       borderWidth: 2,
       borderColor: '#080a0c',
       hoverOffset: 8 }]
@@ -584,6 +1207,7 @@ const donutChart = new Chart(document.getElementById('chartEstado'), {
                 : (activeFilter ? 'rgba(139,148,158,0.25)' : chart.data.datasets[0].backgroundColor[i]),
               strokeStyle: 'transparent',
               fontColor: '#8b949e',
+              pointStyle: 'circle',
               hidden: false,
               index: i,
             }));
@@ -615,13 +1239,15 @@ const barChart = new Chart(document.getElementById('chartEquipo'), {
   data: {
     labels: allEquipos,
     datasets: [
-      { label: 'En Desarrollo', data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Desarrollo').length),
-        backgroundColor: 'rgba(255,214,0,0.7)', borderRadius: 4, borderSkipped: false },
-      { label: 'Completado',    data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Completado').length),
+      { label: 'En desarrollo', data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='En desarrollo').length),
         backgroundColor: 'rgba(0,230,118,0.7)', borderRadius: 4, borderSkipped: false },
+      { label: 'Completado',    data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Completado').length),
+        backgroundColor: 'rgba(0,242,255,0.7)', borderRadius: 4, borderSkipped: false },
       { label: 'Atrasado',      data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Atrasado').length),
-        backgroundColor: 'rgba(255,82,82,0.7)',  borderRadius: 4, borderSkipped: false },
-      { label: 'N/A',           data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='No aplica').length),
+        backgroundColor: 'rgba(255,82,82,0.7)', borderRadius: 4, borderSkipped: false },
+      { label: 'Sin reporte',   data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Sin reporte').length),
+        backgroundColor: 'rgba(255,152,0,0.7)', borderRadius: 4, borderSkipped: false },
+      { label: 'Planificado',   data: allEquipos.map(e => DATA.filter(d=>d.equipo===e&&d.estado==='Planificado').length),
         backgroundColor: 'rgba(139,148,158,0.7)', borderRadius: 4, borderSkipped: false },
     ]
   },
@@ -633,8 +1259,8 @@ const barChart = new Chart(document.getElementById('chartEquipo'), {
       applyEquipoFilter(equipo);
     },
     scales: {
-      x: { stacked: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 10 } } },
-      y: { stacked: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { stepSize: 1 } }
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: { stacked: true, grid: { display: false }, ticks: { stepSize: 1 } }
     },
     plugins: {
       legend: {
@@ -644,26 +1270,27 @@ const barChart = new Chart(document.getElementById('chartEquipo'), {
           font: { size: 11 }, color: '#8b949e',
           usePointStyle: true, pointStyleWidth: 10,
           generateLabels(chart) {
-            const DATASET_ESTADOS = ['Desarrollo', 'Completado', 'Atrasado', 'No aplica'];
-            const DATASET_COLORS  = ['rgba(255,214,0,0.7)','rgba(0,230,118,0.7)','rgba(255,82,82,0.7)','rgba(139,148,158,0.7)'];
-            return ['En Desarrollo','Completado','Atrasado','N/A'].map((label, i) => ({
+            const DATASET_ESTADOS = ['En desarrollo','Completado','Atrasado','Sin reporte','Planificado'];
+            const DATASET_COLORS  = ['rgba(0,230,118,0.7)','rgba(0,242,255,0.7)','rgba(255,82,82,0.7)','rgba(255,152,0,0.7)','rgba(139,148,158,0.7)'];
+            return DATASET_ESTADOS.map((label, i) => ({
               text: label,
               fillStyle: DATASET_ESTADOS[i] === activeFilter
                 ? DATASET_COLORS[i]
                 : (activeFilter ? 'rgba(139,148,158,0.25)' : DATASET_COLORS[i]),
               strokeStyle: 'transparent',
               fontColor: '#8b949e',
+              pointStyle: 'circle',
               hidden: false,
               index: i,
             }));
           },
           filter: (item) => {
-            const DATASET_ESTADOS = ['Desarrollo', 'Completado', 'Atrasado', 'No aplica'];
+            const DATASET_ESTADOS = ['En desarrollo','Completado','Atrasado','Sin reporte','Planificado'];
             return DATA.filter(d => d.estado === DATASET_ESTADOS[item.index]).length > 0;
           }
         },
         onClick(e, item) {
-          const DATASET_ESTADOS = ['Desarrollo', 'Completado', 'Atrasado', 'No aplica'];
+          const DATASET_ESTADOS = ['En desarrollo','Completado','Atrasado','Sin reporte','Planificado'];
           applyFilter(DATASET_ESTADOS[item.index]);
         }
       }
@@ -672,36 +1299,131 @@ const barChart = new Chart(document.getElementById('chartEquipo'), {
 });
 
 // ══════════════════════════
-//  3. LÍNEA — Avance mensual
+//  3. BARRAS APILADAS — Velocidad de Cumplimiento
 // ══════════════════════════
-function avgAvance(subset, field) {
-  const vals = subset.map(d => d[field]).filter(v => v !== null && v !== undefined);
-  return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
+//  3. LÍNEA — Evolución mensual
+// ══════════════════════════
+// ══════════════════════════
+//  3. EVOLUCIÓN — Real vs Esperado mes a mes
+// ══════════════════════════
+// Calcula salud del subset simulando el corte en cierto mes
+function calcularSaludMes(subset, mesIdx) {
+  // Guardar corte actual
+  const corteOrig = FECHA_CORTE;
+  const ultimoDia = new Date(2026, mesIdx + 1, 0).getDate();
+  FECHA_CORTE = new Date(2026, mesIdx, ultimoDia);
+  
+  let rs = 0, es = 0, n = 0;
+  for (const d of subset) {
+    const s = calcularSaludDesafio(d);
+    if (!s) continue;
+    rs += s.real;
+    es += s.esperado;
+    n++;
+  }
+  
+  // Restaurar corte
+  FECHA_CORTE = corteOrig;
+  
+  return n > 0 ? { real: rs/n, esperado: es/n } : { real: 0, esperado: 0 };
 }
 
+function buildEvolucionDatasets(subset, mesCorteIdx) {
+  const labels = [];
+  const reales = [];
+  const esperados = [];
+  const colores = [];
+  
+  for (let m = 0; m <= mesCorteIdx; m++) {
+    const s = calcularSaludMes(subset, m);
+    const real = Math.round(s.real);
+    const esp = Math.round(s.esperado);
+    const delta = real - esp;
+    
+    labels.push(NOMBRES_MES_FULL[m].slice(0, 3)); // "Ene", "Feb", etc.
+    reales.push(real);
+    esperados.push(esp);
+    
+    // Color de la barra según delta (mismas reglas del hero)
+    let color;
+    if (real >= 100)      color = 'rgba(0,242,255,0.7)';   // cyan
+    else if (delta >= 0)  color = 'rgba(0,230,118,0.7)';   // verde
+    else if (delta >= -5) color = 'rgba(255,214,0,0.7)';   // amarillo
+    else                  color = 'rgba(255,82,82,0.7)';   // rojo
+    colores.push(color);
+  }
+  
+  return { labels, reales, esperados, colores };
+}
+
+// Datos iniciales vacíos (refreshAll los completará después)
 const lineChart = new Chart(document.getElementById('chartMensual'), {
-  type: 'line',
+  type: 'bar',
   data: {
-    labels: ['Enero', 'Febrero', 'Marzo'],
-    datasets: [{
-      label: 'Avance promedio (%)',
-      data: [avgAvance(DATA,'avance_enero'), avgAvance(DATA,'avance_febrero'), avgAvance(DATA,'avance_marzo')],
-      borderColor: '#00f2ff', backgroundColor: 'rgba(0,242,255,0.08)',
-      tension: 0.4, fill: true, pointRadius: 6, pointBackgroundColor: '#00f2ff',
-      pointHoverRadius: 8, borderWidth: 2, clip: false
-    }]
+    labels: ['Ene', 'Feb', 'Mar', 'Abr'],
+    datasets: [
+      {
+        type: 'bar',
+        label: '% Real',
+        data: [0,0,0,0],
+        backgroundColor: ['rgba(0,242,255,0.7)','rgba(0,242,255,0.7)','rgba(0,242,255,0.7)','rgba(0,242,255,0.7)'],
+        borderRadius: 4,
+        borderSkipped: false,
+        order: 2,
+      },
+      {
+        type: 'line',
+        label: '% Esperado',
+        data: [0,0,0,0],
+        borderColor: 'rgba(255,255,255,0.65)',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [4, 4],
+        pointBackgroundColor: 'rgba(255,255,255,0.85)',
+        pointBorderColor: '#080a0c',
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0,
+        fill: false,
+        order: 1,
+      }
+    ]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
-    layout: { padding: { top: 20, right: 10 } },
+    layout: { padding: { top: 10, right: 10 } },
     scales: {
-      x: { grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { min: 0, max: 100, grid: { color: 'rgba(255,255,255,0.04)' },
-           ticks: { callback: v => v + '%' } }
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: { beginAtZero: true, max: 100,
+           grid: { color: 'rgba(255,255,255,0.04)' },
+           ticks: { stepSize: 20, font: { size: 10 }, callback: v => v + '%' } }
     },
     plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ` Avance: ${ctx.parsed.y}%` } }
+      legend: {
+        position: 'bottom', align: 'center',
+        labels: {
+          padding: 10, boxWidth: 8, boxHeight: 8,
+          font: { size: 10 }, color: '#8b949e',
+          usePointStyle: true, pointStyle: 'circle',
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%`,
+          afterBody: (items) => {
+            if (items.length >= 2) {
+              const real = items.find(i => i.dataset.label === '% Real')?.parsed.y;
+              const esp  = items.find(i => i.dataset.label === '% Esperado')?.parsed.y;
+              if (real !== undefined && esp !== undefined) {
+                const d = real - esp;
+                return [`Delta: ${d >= 0 ? '+' : ''}${d} pp`];
+              }
+            }
+            return [];
+          }
+        }
+      }
     }
   }
 });
@@ -709,29 +1431,429 @@ const lineChart = new Chart(document.getElementById('chartMensual'), {
 // ══════════════════════════════════
 //  REFRESH — Actualiza todo con filtro
 // ══════════════════════════════════
+// Recalcula el campo `estado` de cada desafío según FECHA_CORTE
+// (Replica la lógica del Excel: Atrasado / Sin reporte / Completado / En desarrollo / Planificado)
+function recalcularEstados() {
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const mesCorteIdx = FECHA_CORTE.getMonth(); // 0-indexed
+  const mesCorteKey = meses[mesCorteIdx];
+  
+  for (const d of DATA) {
+    const tt = TOOLTIP_DATA[d.codigo];
+    const hitos = tt && tt.hitos ? tt.hitos : [];
+    const hitoCorte = hitos.find(h => h.mes_num === mesCorteIdx + 1);
+    const tieneHitoCorte = hitoCorte && hitoCorte.actividad;
+    const avanceCorte = d['avance_' + mesCorteKey];
+    
+    const ff = parseFechaFin(d.fecha_fin);
+    const fi = parseFechaFin(d.fecha_inicio);
+    
+    // 1. Atrasado: avance del corte reportado < 100
+    if (avanceCorte !== null && avanceCorte !== undefined && avanceCorte < 100) {
+      d.estado = 'Atrasado';
+      continue;
+    }
+    
+    // 2. Sin reporte: hay hito en mes corte pero avance vacío
+    if (tieneHitoCorte && (avanceCorte === null || avanceCorte === undefined)) {
+      d.estado = 'Sin reporte';
+      continue;
+    }
+    
+    // 3. Completado: fecha fin <= corte Y avance del mes de fin (o anterior) ≥ 100
+    if (ff && ff <= FECHA_CORTE) {
+      const mesFin = ff.getMonth();
+      const avFin = d['avance_' + meses[mesFin]];
+      if ((avFin !== null && avFin !== undefined && avFin >= 100)
+          || (mesFin <= mesCorteIdx && avanceCorte !== null && avanceCorte !== undefined && avanceCorte >= 100)) {
+        d.estado = 'Completado';
+        continue;
+      }
+      // 4. Fecha venció pero no completado
+      d.estado = 'Atrasado';
+      continue;
+    }
+    
+    // 5. En desarrollo: hay algún avance >0 en meses ≤ corte
+    let tienePrevio = false;
+    for (let i = 0; i <= mesCorteIdx; i++) {
+      const v = d['avance_' + meses[i]];
+      if (v !== null && v !== undefined && v > 0) { tienePrevio = true; break; }
+    }
+    d.estado = tienePrevio ? 'En desarrollo' : 'Planificado';
+  }
+}
+
+// ══════════════════════════════════════════════
+//  BREADCRUMB de drill-down jerárquico
+// ══════════════════════════════════════════════
+
+// Aplicar un nivel del breadcrumb: deja activo solo este filtro y los anteriores
+function breadcrumbDrillTo(level) {
+  // level: 'all' | 'gerencia' | 'equipo'
+  // Quita los filtros más específicos manteniendo los anteriores
+  if (level === 'all') {
+    activeGerencia = null;
+    activeEquipo = null;
+    activeFilter = null;
+  } else if (level === 'gerencia') {
+    // Mantener gerencia, quitar equipo y estado
+    activeEquipo = null;
+    activeFilter = null;
+  } else if (level === 'equipo') {
+    // Mantener gerencia y equipo, quitar estado
+    activeFilter = null;
+  }
+  refreshAll();
+}
+
+function clearAllFilters() {
+  activeGerencia = null;
+  activeEquipo = null;
+  activeFilter = null;
+  refreshAll();
+}
+
+function renderBreadcrumb() {
+  const container = document.getElementById('breadcrumb-container');
+  if (!container) return;
+  
+  // Si no hay filtros, ocultar
+  if (!activeGerencia && !activeEquipo && !activeFilter) {
+    container.style.display = 'none';
+    return;
+  }
+  
+  container.style.display = 'flex';
+  
+  // Construir cadena: Gerencia → Equipo → Estado
+  const segments = [];
+  
+  // Calcular conteos progresivos
+  let cumulative = DATA;
+  
+  // Segmento 1: "Todos"
+  segments.push({
+    label: 'Todos',
+    count: DATA.length,
+    onClick: 'breadcrumbDrillTo(\'all\')',
+    isLast: false,
+    type: 'all'
+  });
+  
+  if (activeGerencia) {
+    cumulative = cumulative.filter(d => d.gerencia === activeGerencia);
+    segments.push({
+      label: activeGerencia,
+      count: cumulative.length,
+      onClick: 'breadcrumbDrillTo(\'gerencia\')',
+      isLast: !activeEquipo && !activeFilter,
+      type: 'gerencia'
+    });
+  }
+  
+  if (activeEquipo) {
+    cumulative = cumulative.filter(d => d.equipo === activeEquipo);
+    segments.push({
+      label: activeEquipo,
+      count: cumulative.length,
+      onClick: 'breadcrumbDrillTo(\'equipo\')',
+      isLast: !activeFilter,
+      type: 'equipo'
+    });
+  }
+  
+  if (activeFilter) {
+    cumulative = cumulative.filter(d => d.estado === activeFilter);
+    // Mapeo de estado a clase CSS de color
+    const stateMap = {
+      'Completado':    'completado',
+      'En desarrollo': 'desarrollo',
+      'Atrasado':      'atrasado',
+      'Sin reporte':   'sinreporte',
+      'Planificado':   'planificado',
+    };
+    segments.push({
+      label: activeFilter,
+      count: cumulative.length,
+      onClick: '',
+      isLast: true,
+      type: 'estado',
+      stateClass: stateMap[activeFilter] || ''
+    });
+  }
+  
+  // Marcar el primer segmento como "ya no es activo"
+  segments[0].isLast = false;
+  
+  const html = `
+    <span class="breadcrumb-label">Vista filtrada:</span>
+    ${segments.map((s, i) => {
+      const arrow = i > 0 ? '<span class="breadcrumb-arrow">›</span>' : '';
+      const lastClass = s.isLast ? ' last' : '';
+      const stateClass = s.stateClass ? ' bc-' + s.stateClass : '';
+      const clickAttr = s.isLast ? '' : `onclick="${s.onClick}"`;
+      return `${arrow}<span class="breadcrumb-segment${lastClass}${stateClass}" ${clickAttr}>
+        ${s.label} <span class="seg-count">(${s.count})</span>
+      </span>`;
+    }).join('')}
+    <button class="breadcrumb-clear" onclick="clearAllFilters()">✕ Limpiar</button>
+  `;
+  
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+//  COMPARATIVA HISTÓRICA (mes anterior)
+// ══════════════════════════════════════════════
+
+// Simula los KPIs como estarían al cierre del mes anterior al corte actual
+// Devuelve null si no hay mes anterior con datos
+function calcularKPIsMesAnterior() {
+  const mesActual = FECHA_CORTE.getMonth();
+  const anioActual = FECHA_CORTE.getFullYear();
+  
+  // Si estamos en enero (idx 0), no hay mes anterior dentro del mismo año con datos
+  if (mesActual === 0) return null;
+  
+  const mesAnteriorIdx = mesActual - 1;
+  const ultimoDia = new Date(anioActual, mesAnteriorIdx + 1, 0).getDate();
+  const fechaAnterior = new Date(anioActual, mesAnteriorIdx, ultimoDia);
+  
+  // Verificar si ese mes tiene datos reportados (al menos 1 desafío)
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const tieneData = DATA.some(d => d['avance_'+meses[mesAnteriorIdx]] !== null && d['avance_'+meses[mesAnteriorIdx]] !== undefined);
+  if (!tieneData) return null;
+  
+  // Guardar estados actuales para no modificarlos
+  const estadoActual = DATA.map(d => d.estado);
+  const corteActual = FECHA_CORTE;
+  
+  // Aplicar simulación
+  FECHA_CORTE = fechaAnterior;
+  recalcularEstados();
+  
+  // Calcular KPIs simulados
+  const sub = DATA;
+  const completados = sub.filter(x=>x.estado==='Completado').length;
+  const desarrollo = sub.filter(x=>x.estado==='En desarrollo').length;
+  const atrasados = sub.filter(x=>x.estado==='Atrasado').length;
+  const sinrep = sub.filter(x=>x.estado==='Sin reporte').length;
+  const planif = sub.filter(x=>x.estado==='Planificado').length;
+  
+  const proximos = sub.filter(x => {
+    if (x.estado !== 'En desarrollo') return false;
+    const ff = parseFechaFin(x.fecha_fin);
+    if (!ff) return false;
+    const diff = (ff.getFullYear() - FECHA_CORTE.getFullYear()) * 12 + (ff.getMonth() - FECHA_CORTE.getMonth());
+    return diff >= 0 && diff <= 2;
+  }).length;
+  
+  const foco = computeFocoComite(sub).length;
+  
+  // Salud del portafolio simulada (modelo de hitos)
+  // FECHA_CORTE ya fue desplazada al mes anterior arriba en esta función
+  let realSum = 0, espSum = 0, n = 0;
+  for (const x of sub) {
+    const salud = calcularSaludDesafio(x);
+    if (salud === null) continue;
+    realSum += salud.real;
+    espSum += salud.esperado;
+    n++;
+  }
+  const realAvg = n ? Math.round(realSum / n) : 0;
+  const espAvg = n ? Math.round(espSum / n) : 0;
+  
+  // Restaurar estados
+  FECHA_CORTE = corteActual;
+  DATA.forEach((d, i) => d.estado = estadoActual[i]);
+  
+  return {
+    mes: NOMBRES_MES_FULL[mesAnteriorIdx],
+    completados, desarrollo, atrasados, sinrep, planif,
+    proximos, foco,
+    real: realAvg, esp: espAvg, delta: realAvg - espAvg
+  };
+}
+
+// Cache para evitar recalcular
+let kpisAnteriorCache = null;
+let kpisAnteriorCorte = null;
+
+function getKPIsMesAnterior() {
+  if (kpisAnteriorCorte === FECHA_CORTE.getTime()) return kpisAnteriorCache;
+  kpisAnteriorCache = calcularKPIsMesAnterior();
+  kpisAnteriorCorte = FECHA_CORTE.getTime();
+  return kpisAnteriorCache;
+}
+
+function fmtDelta(actual, anterior, modo) {
+  // modo: 'good_up' (más es mejor, ej. completados) | 'bad_up' (más es peor, ej. atrasados) | 'pp' (puntos porcentuales)
+  if (anterior === null || anterior === undefined) return '';
+  const delta = actual - anterior;
+  if (delta === 0) return `<span class="delta neutral">= sin cambios</span>`;
+  
+  const isGood = (modo === 'good_up' && delta > 0) || (modo === 'bad_up' && delta < 0) || (modo === 'pp' && delta > 0);
+  const cls = isGood ? 'positivo' : 'negativo';
+  const arrow = delta > 0 ? '▲' : '▼';
+  const sign = delta > 0 ? '+' : '';
+  const unit = modo === 'pp' ? ' pp' : '';
+  
+  return `<span class="delta ${cls}">${arrow} ${sign}${delta}${unit}</span>`;
+}
+
+// Construye el contenido del tooltip de delta para una tarjeta
+function buildDeltaTooltip(label, actual, anterior, modo) {
+  const prev = getKPIsMesAnterior();
+  if (!prev) return `<div class="delta-tip-mes">Primer mes con datos</div>`;
+  
+  return `
+    <div class="delta-tip-row">
+      <span class="delta-tip-label">${prev.mes}:</span>
+      <span class="delta-tip-val">${anterior}</span>
+    </div>
+    <div class="delta-tip-row current">
+      <span class="delta-tip-label">Hoy:</span>
+      <span class="delta-tip-val">${actual}</span>
+    </div>
+    <div class="delta-tip-delta">${fmtDelta(actual, anterior, modo)}</div>
+  `;
+}
+
 function refreshAll() {
+  recalcularEstados();
+  // Invalidar cache de comparativa histórica si cambió el corte
+  if (kpisAnteriorCorte !== FECHA_CORTE.getTime()) {
+    kpisAnteriorCache = null;
+    kpisAnteriorCorte = null;
+  }
   const subset = getFiltered();
 
   // ── Actualizar KPIs ──
   const t = subset.length;
   const d = subset.filter(x=>x.estado==='Completado').length;
-  const v = subset.filter(x=>x.estado==='Desarrollo').length;
-  const n = subset.filter(x=>x.estado==='No aplica').length;
+  const v = subset.filter(x=>x.estado==='En desarrollo').length;
   const a = subset.filter(x=>x.estado==='Atrasado').length;
-  document.getElementById('kpi-total').textContent = t;
+  const sr = subset.filter(x=>x.estado==='Sin reporte').length;
+  
+  // Próximos a vencer (en desarrollo, ≤2 meses)
+  const prox = subset.filter(x => {
+    if (x.estado !== 'En desarrollo') return false;
+    const ff = parseFechaFin(x.fecha_fin);
+    if (!ff) return false;
+    const diff = (ff.getFullYear() - FECHA_CORTE.getFullYear()) * 12 + (ff.getMonth() - FECHA_CORTE.getMonth());
+    return diff >= 0 && diff <= 2;
+  }).length;
+  
+  // Planificados (aún no inician)
+  const planif = subset.filter(x => x.estado === 'Planificado').length;
+  // Foco del Comité (top 3 de mayor urgencia, todavía se usa para destacar en el Radar)
+  const focoCount = computeFocoComite(subset).length;
+  
+  // ── HERO: Salud del Portafolio (modelo de hitos) ──
+  let realSum = 0, espSum = 0, n = 0;
+  for (const x of subset) {
+    const salud = calcularSaludDesafio(x);
+    if (salud === null) continue;
+    realSum += salud.real;
+    espSum += salud.esperado;
+    n++;
+  }
+  const realAvg = n ? Math.round(realSum / n) : 0;
+  const espAvg = n ? Math.round(espSum / n) : 0;
+  const delta = realAvg - espAvg;
+  
+  document.getElementById('hero-real').textContent = realAvg;
+  document.getElementById('hero-esperado').textContent = espAvg;
+  
+  // ── Color condicional de la tarjeta Salud del Portafolio ──
+  // Mismas reglas que el badge delta:
+  //   Cyan si todo al 100%, Verde si en plazo, Amarillo entre -5 y 0, Rojo bajo -5
+  const heroEl = document.getElementById('kpi-hero');
+  let heroClass;
+  if (realAvg >= 100)   heroClass = 'salud-completo';
+  else if (delta >= 0)  heroClass = 'salud-positivo';
+  else if (delta >= -5) heroClass = 'salud-neutro';
+  else                  heroClass = 'salud-negativo';
+  heroEl.classList.remove('salud-completo','salud-positivo','salud-neutro','salud-negativo');
+  heroEl.classList.add(heroClass);
+  
+  const deltaEl = document.getElementById('hero-delta');
+  let deltaClass, deltaSign = delta >= 0 ? '+' : '';
+  if (delta >= 0) deltaClass = 'positivo';
+  else if (delta >= -5) deltaClass = 'neutro';
+  else deltaClass = 'negativo';
+  deltaEl.textContent = `${deltaSign}${delta} pp`;
+  deltaEl.className = 'kpi-hero-delta ' + deltaClass;
+  
+  document.getElementById('hero-bar-real').style.width = Math.min(realAvg, 100) + '%';
+  document.getElementById('hero-bar-marker').style.left = `calc(${Math.min(espAvg, 100)}% - 1px)`;
+  
+  // Mensaje contextual
+  const msg = document.getElementById('hero-msg');
+  if (delta >= 5) msg.textContent = `Portafolio adelantado en ${delta} puntos sobre lo planificado`;
+  else if (delta >= 0) msg.textContent = `Portafolio en línea con el plan (${delta >= 0 ? '+' : ''}${delta} pp)`;
+  else if (delta >= -5) msg.textContent = `Portafolio levemente bajo lo planificado (${delta} pp)`;
+  else msg.textContent = `⚠ Portafolio ${Math.abs(delta)} puntos bajo lo planificado — atención requerida`;
+  
+  // Delta del hero vs mes anterior
+  const sinFiltrosHero = !activeFilter && !activeGerencia && !activeEquipo;
+  const prevHero = sinFiltrosHero ? getKPIsMesAnterior() : null;
+  document.getElementById('delta-tip-hero').innerHTML = !sinFiltrosHero
+    ? '<div class="delta-tip-mes">Comparativa disponible<br>solo en vista global</div>'
+    : (prevHero
+        ? `<div class="delta-tip-row"><span class="delta-tip-label">${prevHero.mes}:</span><span class="delta-tip-val">${prevHero.real}% / ${prevHero.esp}%</span></div>
+           <div class="delta-tip-row current"><span class="delta-tip-label">Hoy:</span><span class="delta-tip-val">${realAvg}% / ${espAvg}%</span></div>
+           <div class="delta-tip-delta">Real ${fmtDelta(realAvg, prevHero.real, 'pp')}</div>`
+        : '<div class="delta-tip-mes">Primer mes con datos</div>');
+  
+  // ── Satélites ──
   document.getElementById('badge-total').textContent = t;
-  document.getElementById('kpi-done').textContent  = d;
-  document.getElementById('kpi-dev').textContent   = v;
-  document.getElementById('kpi-noap').textContent  = n;
   document.getElementById('kpi-atrasado').textContent = a;
-  document.getElementById('kpi-done-pct').textContent = t ? `${Math.round(d/t*100)}% del total` : '—';
-  document.getElementById('kpi-dev-pct').textContent  = t ? `${Math.round(v/t*100)}% del total` : '—';
-  document.getElementById('kpi-atrasado-sub').textContent = a === 0 ? '✅ Sin atrasos' : 'Requieren atención urgente';
+  document.getElementById('kpi-sinreporte').textContent = sr;
+  document.getElementById('kpi-proximo').textContent = prox;
+  document.getElementById('kpi-foco').textContent = planif;
+  
+  // Subs con % del total
+  const pct = (n) => t > 0 ? `${Math.round(n/t*100)}% del total` : '—';
+  document.getElementById('kpi-atrasado-sub').textContent   = a === 0    ? '✅ Sin atrasos'      : pct(a);
+  document.getElementById('kpi-sinreporte-sub').textContent = sr === 0   ? '✅ Todo reportado'   : pct(sr);
+  document.getElementById('kpi-proximo-sub').textContent    = prox === 0 ? 'Sin vencimientos próximos' : pct(prox);
+  document.getElementById('kpi-foco-sub').textContent       = planif === 0 ? 'Todos iniciados'    : pct(planif);
+  
+  // ── Tooltips de comparativa histórica (mes anterior) ──
+  // Solo mostrar deltas cuando NO hay filtros activos (los KPIs comparados deben ser los del DATA completo)
+  const sinFiltros = !activeFilter && !activeGerencia && !activeEquipo;
+  const prev = sinFiltros ? getKPIsMesAnterior() : null;
+  
+  document.getElementById('delta-tip-atrasado').innerHTML = !sinFiltros
+    ? '<div class="delta-tip-mes">Comparativa disponible<br>solo en vista global</div>'
+    : (prev
+        ? buildDeltaTooltip('Atrasados', a, prev.atrasados, 'bad_up')
+        : '<div class="delta-tip-mes">Primer mes con datos</div>');
+  
+  document.getElementById('delta-tip-sinreporte').innerHTML = !sinFiltros
+    ? '<div class="delta-tip-mes">Comparativa disponible<br>solo en vista global</div>'
+    : (prev
+        ? buildDeltaTooltip('Sin Reporte', sr, prev.sinrep, 'bad_up')
+        : '<div class="delta-tip-mes">Primer mes con datos</div>');
+  
+  document.getElementById('delta-tip-proximo').innerHTML = !sinFiltros
+    ? '<div class="delta-tip-mes">Comparativa disponible<br>solo en vista global</div>'
+    : (prev
+        ? buildDeltaTooltip('Próximos', prox, prev.proximos, 'bad_up')
+        : '<div class="delta-tip-mes">Primer mes con datos</div>');
+  
+  document.getElementById('delta-tip-foco').innerHTML = !sinFiltros
+    ? '<div class="delta-tip-mes">Comparativa disponible<br>solo en vista global</div>'
+    : (prev
+        ? buildDeltaTooltip('Planificados', planif, prev.planif, 'good_up')
+        : '<div class="delta-tip-mes">Primer mes con datos</div>');
 
   // ── Donut: resaltar segmento activo ──
   const bgColors = ESTADO_KEYS.map((k,i) => {
-    if (!activeFilter) return ['#00e676','#ffd600','#ff5252','#8b949e'][i];
-    return k === activeFilter ? ['#00e676','#ffd600','#ff5252','#8b949e'][i] : 'rgba(139,148,158,0.2)';
+    if (!activeFilter) return ESTADO_COLORS[i];
+    return k === activeFilter ? ESTADO_COLORS[i] : 'rgba(139,148,158,0.2)';
   });
   donutChart.data.datasets[0].backgroundColor = bgColors;
   donutChart.data.datasets[0].data = ESTADO_KEYS.map(k => {
@@ -741,8 +1863,8 @@ function refreshAll() {
   donutChart.update();
 
   // ── Barras: opacidad según filtro ──
-  const DATASET_ESTADO = ['Desarrollo','Completado','Atrasado','No aplica'];
-  const DATASET_COLORS = ['rgba(255,214,0,0.7)','rgba(0,230,118,0.7)','rgba(255,82,82,0.7)','rgba(139,148,158,0.7)'];
+  const DATASET_ESTADO = ['En desarrollo','Completado','Atrasado','Sin reporte','Planificado'];
+  const DATASET_COLORS = ['rgba(0,230,118,0.7)','rgba(0,242,255,0.7)','rgba(255,82,82,0.7)','rgba(255,152,0,0.7)','rgba(139,148,158,0.7)'];
   barChart.data.datasets.forEach((ds, i) => {
     const estado = DATASET_ESTADO[i];
     const col = DATASET_COLORS[i];
@@ -766,53 +1888,28 @@ function refreshAll() {
   barChart.options.plugins.legend.labels.generateLabels(barChart);
   barChart.update('none');
 
-  // ── Línea: recalcular con subset ──
-  // Para avance mensual usamos el acumulado hasta ese mes
-  function avgMes(sub, field, fallback) {
-    const vals = sub.map(d => d[field] !== null && d[field] !== undefined ? d[field] : (fallback ? d[fallback] : null))
-                    .filter(v => v !== null);
-    return vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
-  }
-  lineChart.data.datasets[0].data = [
-    avgAvance(subset,'avance_enero'),
-    avgAvance(subset,'avance_febrero'),
-    avgAvance(subset,'avance_marzo'),
-  ];
-  lineChart.data.datasets[0].borderColor = activeFilter ? (ESTADO_COLORS[activeFilter]||'#00f2ff') : '#00f2ff';
-  lineChart.data.datasets[0].pointBackgroundColor = activeFilter ? (ESTADO_COLORS[activeFilter]||'#00f2ff') : '#00f2ff';
-  lineChart.data.datasets[0].backgroundColor = activeFilter
-    ? (ESTADO_COLORS[activeFilter]||'#00f2ff').replace(')',',0.08)').replace('rgb','rgba') + '08'
-    : 'rgba(0,242,255,0.08)';
+  // ── Evolución: recalcular real vs esperado por mes con subset ──
+  const evData = buildEvolucionDatasets(subset, FECHA_CORTE.getMonth());
+  lineChart.data.labels = evData.labels;
+  lineChart.data.datasets[0].data = evData.reales;
+  lineChart.data.datasets[0].backgroundColor = evData.colores;
+  lineChart.data.datasets[1].data = evData.esperados;
   lineChart.update();
 
-  // ── Progress bars ──
-  const progList = document.getElementById('progressList');
-  const eqAvance = {};
-  allEquipos.forEach(e => {
-    const vals = subset.filter(d=>d.equipo===e && d.avance_total!==null).map(d=>d.avance_total);
-    eqAvance[e] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : 0;
-  });
-  const sorted = allEquipos.filter(e => subset.some(d=>d.equipo===e))
-    .sort((a,b)=>eqAvance[b]-eqAvance[a]).slice(0,7);
-  progList.innerHTML = sorted.map(e => {
-    const pct = eqAvance[e];
-    const color = activeFilter ? (ESTADO_COLORS[activeFilter]||'var(--accent)') : 'var(--accent)';
-    return `<div class="progress-item">
-      <div class="progress-header">
-        <span class="progress-name">${e}</span>
-        <span class="progress-pct">${pct}%</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" style="width:${pct}%;background:${color}"></div>
-      </div>
-    </div>`;
-  }).join('');
+  // ── Radar de Atención ──
+  renderRadar(subset);
 
   // ── Tabla ──
+  // ── Breadcrumb de drill-down ──
+  renderBreadcrumb();
+  
   renderTable(subset);
 
   // ── Gerencias Scorecard ──
   renderGerencias(subset);
+  
+  // ── Carga por Líder ──
+  renderLideres(subset);
 
   // ── Botones de filtro ──
   document.querySelectorAll('.filter-btn').forEach(b => {
@@ -835,6 +1932,415 @@ function applySearch(val) {
 }
 
 // ── Tabla ──
+// ══════════════════════════════════════════════
+//  RADAR DE ATENCIÓN
+// ══════════════════════════════════════════════
+// Fecha de corte (editable). Por defecto abril 2026 (último mes con datos)
+let FECHA_CORTE = new Date(2026, 3, 30); // month 0-indexed
+const DIAS_PROXIMO_VENCER = 60;
+const NOMBRES_MES_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// Detecta el último mes con datos (cuál es el mes "actual" según los datos)
+function detectarMesActual() {
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  let ultimo = 0;
+  for (let i = 0; i < meses.length; i++) {
+    const tieneData = DATA.some(d => d['avance_'+meses[i]] !== null && d['avance_'+meses[i]] !== undefined);
+    if (tieneData) ultimo = i;
+  }
+  return ultimo;
+}
+
+// Popular el selector con meses desde el actual hacia atrás
+function inicializarSelectorCorte() {
+  const sel = document.getElementById('selectorMesCorte');
+  if (!sel) return;
+  const mesActual = detectarMesActual(); // 0-indexed, último mes con datos
+  const anio = 2026;
+  // Orden cronológico: enero → mes actual
+  for (let i = 0; i <= mesActual; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${NOMBRES_MES_FULL[i]} ${anio}`;
+    if (i === mesActual) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  sel.addEventListener('change', () => {
+    const m = parseInt(sel.value);
+    const anio = 2026;
+    const ultimoDia = new Date(anio, m + 1, 0).getDate();
+    FECHA_CORTE = new Date(anio, m, ultimoDia);
+    refreshAll();
+  });
+}
+
+function parseFechaFin(s) {
+  if (!s) return null;
+  const parts = s.split('/');
+  if (parts.length !== 3) return null;
+  return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+}
+
+// Calcula el % esperado de avance basado en meses transcurridos (inclusivo).
+// Modelo simple: meses_transcurridos / meses_totales × 100.
+// El mes de corte cuenta como transcurrido si es ≥ mes_inicio.
+//   - Si aún no inicia → 0%
+//   - Si ya pasó la fecha fin → 100%
+//   - El conteo es por mes calendario, no por días.
+// Devuelve null si faltan fechas o son inválidas.
+function porcentajeEsperado(fechaInicio, fechaFin, fechaCorte) {
+  if (!fechaInicio || !fechaFin) return null;
+  
+  const yIni = fechaInicio.getFullYear(), mIni = fechaInicio.getMonth();
+  const yFin = fechaFin.getFullYear(),    mFin = fechaFin.getMonth();
+  const yCor = fechaCorte.getFullYear(),  mCor = fechaCorte.getMonth();
+  
+  // Meses totales del proyecto (inclusivos: mar→jul = 5 meses)
+  const totalMeses = (yFin - yIni) * 12 + (mFin - mIni) + 1;
+  if (totalMeses <= 0) return null;
+  
+  // Meses transcurridos al corte (inclusivos)
+  const transcurridos = (yCor - yIni) * 12 + (mCor - mIni) + 1;
+  
+  if (transcurridos <= 0) return 0;
+  if (transcurridos >= totalMeses) return 100;
+  return Math.round((transcurridos / totalMeses) * 100);
+}
+
+function diasHasta(fecha) {
+  if (!fecha) return null;
+  return Math.round((fecha - FECHA_CORTE) / (1000*60*60*24));
+}
+
+const NOMBRES_MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function fmtVencimiento(fechaFin) {
+  if (!fechaFin) return '—';
+  const mesFin = fechaFin.getMonth();   // 0-indexed
+  const mesCorte = FECHA_CORTE.getMonth();
+  const anioFin = fechaFin.getFullYear();
+  const anioCorte = FECHA_CORTE.getFullYear();
+  const nombre = NOMBRES_MES[mesFin];
+  
+  // Comparar año/mes (no día)
+  if (anioFin < anioCorte || (anioFin === anioCorte && mesFin < mesCorte)) {
+    return `Venció en ${nombre}`;
+  }
+  if (anioFin === anioCorte && mesFin === mesCorte) {
+    return `Vence este mes`;
+  }
+  // Futuro
+  if (anioFin === anioCorte) {
+    return `Vence en ${nombre}`;
+  }
+  return `Vence en ${nombre} ${anioFin}`;
+}
+
+function clasifVencimiento(fechaFin) {
+  if (!fechaFin) return 'normal';
+  const mesFin = fechaFin.getMonth();
+  const mesCorte = FECHA_CORTE.getMonth();
+  const anioFin = fechaFin.getFullYear();
+  const anioCorte = FECHA_CORTE.getFullYear();
+  if (anioFin < anioCorte || (anioFin === anioCorte && mesFin < mesCorte)) return 'vencido';
+  if (anioFin === anioCorte && mesFin === mesCorte) return 'urgente';
+  // diferencia en meses
+  const diffMeses = (anioFin - anioCorte) * 12 + (mesFin - mesCorte);
+  if (diffMeses === 1) return 'urgente';
+  return 'normal';
+}
+
+// Devuelve el último avance reportado del desafío hasta el mes de corte (no después)
+// Aplica también la regla de "Sin reporte" Opción B: si está sin reporte y la Fecha_Fin
+// ya venció, cuenta como 0%.
+// ══════════════════════════════════════════════
+//  MODELO DE HITOS (Salud del Portafolio)
+// ══════════════════════════════════════════════
+// Calcula real y esperado de un desafío según sus hitos planificados
+// Reglas:
+//  - Hito en mes corte sin reporte → cuenta 0
+//  - Hito intermedio sin reporte pero con reporte posterior → cuenta 100 (regla M5)
+//  - Hito intermedio sin reporte ni posterior → cuenta 0
+//  - % real = promedio(avances) × (hitos_transcurridos / total_hitos)
+//  - % esperado = 100 × (hitos_transcurridos / total_hitos)
+//  - Proyecto futuro (sin hitos transcurridos) → 0% / 0% (neutral)
+//  - Sin hitos planificados → null (descartado del cálculo)
+function calcularSaludDesafio(d) {
+  const tt = TOOLTIP_DATA[d.codigo];
+  if (!tt || !tt.hitos) return null;
+  
+  const mesCorteIdx = FECHA_CORTE.getMonth(); // 0-indexed
+  
+  // Hitos planificados (con actividad declarada) ordenados por mes
+  const hitosPlan = tt.hitos
+    .filter(h => h.actividad)
+    .sort((a, b) => a.mes_num - b.mes_num);
+  
+  if (!hitosPlan.length) return null;
+  
+  const totalHitos = hitosPlan.length;
+  
+  // Hitos transcurridos: con mes_num ≤ mesCorteIdx+1 (1-indexed)
+  const transcurridos = hitosPlan.filter(h => h.mes_num <= mesCorteIdx + 1);
+  
+  if (!transcurridos.length) {
+    // Proyecto futuro: neutral
+    return { real: 0, esperado: 0 };
+  }
+  
+  // Opción 2: si el desafío está Completado, todos los hitos cuentan 100
+  // (el resultado final del proyecto es 100, así que la "calidad" de los hitos intermedios
+  //  ya no penaliza la salud del portafolio)
+  let avances;
+  if (d.estado === 'Completado') {
+    avances = transcurridos.map(() => 100);
+  } else {
+    avances = [];
+    for (let i = 0; i < transcurridos.length; i++) {
+      const hito = transcurridos[i];
+      const avance = hito.avance;
+      const esMesCorte = (hito.mes_num === mesCorteIdx + 1);
+      
+      if (avance !== null && avance !== undefined && avance > 0) {
+        avances.push(avance);
+      } else {
+        // Vacío
+        if (esMesCorte) {
+          avances.push(0);
+        } else {
+          // Hito intermedio: ¿hay reporte posterior?
+          const hayPosterior = transcurridos.slice(i + 1).some(h => 
+            h.avance !== null && h.avance !== undefined && h.avance > 0
+          );
+          avances.push(hayPosterior ? 100 : 0);
+        }
+      }
+    }
+  }
+  
+  const promedioAvances = avances.reduce((a, b) => a + b, 0) / avances.length;
+  const real = promedioAvances * (transcurridos.length / totalHitos);
+  const esperado = 100 * (transcurridos.length / totalHitos);
+  
+  return { real, esperado };
+}
+
+// Wrapper retrocompatible: devuelve solo el avance real (para tabla y otros usos)
+function getAvanceReal(d) {
+  const r = calcularSaludDesafio(d);
+  if (r === null) return 0;
+  return Math.round(r.real);
+}
+
+// Wrapper retrocompatible: devuelve solo el % esperado
+function calcularEsperado(fi, ff, d) {
+  // Si recibimos el objeto completo del desafío, usamos modelo de hitos
+  if (d) {
+    const r = calcularSaludDesafio(d);
+    if (r === null) return null;
+    return r.esperado;
+  }
+  // Sin objeto: no podemos calcular con hitos → null (descartado)
+  return null;
+}
+
+// Calcula nivel de riesgo de un desafío según delta entre avance real y esperado
+// Devuelve: 'alto', 'medio', o null
+function computeRiesgo(d) {
+  if (d.estado === 'Completado' || d.estado === 'Planificado') return null;
+  const salud = calcularSaludDesafio(d);
+  if (!salud) return null;
+  
+  const delta = salud.real - salud.esperado;
+  
+  if (delta < -15) return 'alto';
+  if (delta < -5)  return 'medio';
+  return null;
+}
+
+// Calcula los desafíos del Foco del Comité según prioridad jerárquica
+function computeFocoComite(subset) {
+  const candidatos = [];
+  for (const d of subset) {
+    if (d.estado === 'Completado') continue;
+    const ff = parseFechaFin(d.fecha_fin);
+    if (!ff) continue;
+    const diff = (ff - FECHA_CORTE) / 86400000;
+    
+    if (ff < FECHA_CORTE) {
+      candidatos.push({ d, prio: 1, sortKey: diff });
+    } else if (d.estado === 'Atrasado' && (d.avance_objetivo ?? 0) < 70) {
+      candidatos.push({ d, prio: 2, sortKey: -(d.avance_objetivo ?? 0) });
+    } else if (d.estado === 'Sin reporte'
+               && ff.getMonth() === FECHA_CORTE.getMonth()
+               && ff.getFullYear() === FECHA_CORTE.getFullYear()) {
+      candidatos.push({ d, prio: 3, sortKey: 0 });
+    } else if (d.estado === 'Atrasado') {
+      candidatos.push({ d, prio: 4, sortKey: diff });
+    }
+  }
+  candidatos.sort((a, b) => a.prio - b.prio || a.sortKey - b.sortKey);
+  return candidatos.slice(0, 3).map(c => c.d);
+}
+
+function renderRadar(subset) {
+  const container = document.getElementById('radarList');
+  if (!container) return;
+  
+  // Calcular foco del comité para destacar
+  const focoCodigos = new Set(computeFocoComite(subset).map(d => d.codigo));
+  // Ordenar por días hasta la fecha fin (mantenemos el cálculo solo para ordenar)
+  const sortKey = d => {
+    const ff = parseFechaFin(d.fecha_fin);
+    return ff ? (ff - FECHA_CORTE) : 9999999;
+  };
+  
+  const atrasados = subset
+    .filter(d => d.estado === 'Atrasado')
+    .sort((a, b) => sortKey(a) - sortKey(b));
+  
+  const sinReporte = subset
+    .filter(d => d.estado === 'Sin reporte')
+    .sort((a, b) => sortKey(a) - sortKey(b));
+  
+  // Próximos a vencer: en desarrollo cuya Fecha_Fin cae en los próximos 2 meses calendario
+  const proximos = subset
+    .filter(d => {
+      if (d.estado !== 'En desarrollo') return false;
+      const ff = parseFechaFin(d.fecha_fin);
+      if (!ff) return false;
+      const diffMeses = (ff.getFullYear() - FECHA_CORTE.getFullYear()) * 12
+                      + (ff.getMonth() - FECHA_CORTE.getMonth());
+      return diffMeses >= 0 && diffMeses <= 2;
+    })
+    .sort((a, b) => sortKey(a) - sortKey(b));
+  
+  const sections = [];
+  
+  if (atrasados.length) {
+    sections.push(`
+      <div class="radar-section">
+        <div class="radar-heading atrasado">
+          <span class="radar-dot" style="background:#ff5252"></span>
+          Atrasados <span class="radar-count">${atrasados.length}</span>
+        </div>
+        ${atrasados.map(d => radarItem(d, 'atrasado', true, focoCodigos)).join('')}
+      </div>`);
+  }
+  
+  if (sinReporte.length) {
+    sections.push(`
+      <div class="radar-section">
+        <div class="radar-heading sinreporte">
+          <span class="radar-dot" style="background:#ff9800"></span>
+          Sin reporte <span class="radar-count">${sinReporte.length}</span>
+        </div>
+        ${sinReporte.map(d => radarItem(d, 'sinreporte', false, focoCodigos)).join('')}
+      </div>`);
+  }
+  
+  // En riesgo: avance real <esperado por más de 15pp, sin estar ya en otra categoría
+  const yaEnOtra = new Set([...atrasados, ...sinReporte].map(d => d.codigo));
+  const enRiesgo = subset
+    .filter(d => !yaEnOtra.has(d.codigo) && computeRiesgo(d) === 'alto')
+    .sort((a, b) => sortKey(a) - sortKey(b));
+  
+  if (enRiesgo.length) {
+    sections.push(`
+      <div class="radar-section">
+        <div class="radar-heading enriesgo">
+          <span class="radar-dot" style="background:#b388ff"></span>
+          En riesgo de incumplimiento <span class="radar-count">${enRiesgo.length}</span>
+        </div>
+        ${enRiesgo.map(d => radarItem(d, 'enriesgo', false, focoCodigos)).join('')}
+      </div>`);
+  }
+  
+  if (proximos.length) {
+    sections.push(`
+      <div class="radar-section">
+        <div class="radar-heading proximo">
+          <span class="radar-dot" style="background:#00f2ff"></span>
+          Próximos a vencer <span class="radar-count">${proximos.length}</span>
+        </div>
+        ${proximos.map(d => radarItem(d, 'proximo', false, focoCodigos)).join('')}
+      </div>`);
+  }
+  
+  if (!sections.length) {
+    // Distinguir entre "no hay desafíos activos" y "hay activos pero todo al día"
+    const tieneActivos = subset.some(d => 
+      d.estado === 'En desarrollo' || d.estado === 'Atrasado' || d.estado === 'Sin reporte'
+    );
+    
+    if (!tieneActivos) {
+      // No hay desafíos en desarrollo
+      const totalSubset = subset.length;
+      let mensaje;
+      if (totalSubset === 0) {
+        mensaje = 'No hay desafíos en la vista actual';
+      } else {
+        const completados = subset.filter(d => d.estado === 'Completado').length;
+        const planificados = subset.filter(d => d.estado === 'Planificado').length;
+        if (completados === totalSubset) {
+          mensaje = 'Todos los desafíos están completados';
+        } else if (planificados === totalSubset) {
+          mensaje = 'Todos los desafíos están planificados, aún no inician';
+        } else {
+          mensaje = 'Sin desafíos en desarrollo';
+        }
+      }
+      container.innerHTML = `<div class="radar-empty">
+        <div style="font-size:28px;margin-bottom:8px;opacity:0.5;">○</div>
+        <div style="font-size:13px;color:var(--muted);">${mensaje}</div>
+      </div>`;
+    } else {
+      // Hay activos pero ninguno con alertas
+      container.innerHTML = `<div class="radar-empty">
+        <div style="font-size:28px;margin-bottom:8px;">✅</div>
+        <div style="font-size:13px;color:var(--muted);">Sin alertas — todo al día</div>
+      </div>`;
+    }
+    return;
+  }
+  
+  container.innerHTML = sections.join('');
+}
+
+function radarItem(d, kind, showAvance, focoCodigos) {
+  const fechaFin = parseFechaFin(d.fecha_fin);
+  const vencStr = fmtVencimiento(fechaFin);
+  const vencClass = clasifVencimiento(fechaFin);
+  const vencCss = vencClass === 'vencido' ? 'dias-vencido' : (vencClass === 'urgente' ? 'dias-urgente' : 'dias-normal');
+  
+  const isFoco = focoCodigos && focoCodigos.has(d.codigo);
+  const focoBadge = isFoco ? '<span class="radar-foco-badge" onmouseenter="showMiniTooltip(event,\'Foco del Comité\',\'Desafío seleccionado para presentación en el próximo Comité de Tecnología.\')" onmouseleave="hideMiniTooltip()">★</span>' : '';
+  const focoClass = isFoco ? ' is-foco' : '';
+  
+  // % de cumplimiento del plan (no último mes)
+  const avanceHtml = showAvance && d.cumplimiento_plan !== null && d.cumplimiento_plan !== undefined
+    ? `<span class="radar-avance">${d.cumplimiento_plan}%</span>`
+    : '';
+  
+  // Nombre truncado
+  const nombre = d.nombre.length > 48 ? d.nombre.slice(0, 45) + '…' : d.nombre;
+  
+  return `<div class="radar-item ${kind}${focoClass}"
+    onmouseenter="showTooltip(event,'${d.codigo}')"
+    onmouseleave="hideTooltip()">
+    <div class="radar-item-top">
+      ${focoBadge}
+      <span class="radar-cod">${d.codigo}</span>
+      ${avanceHtml}
+      <span class="radar-dias ${vencCss}">${vencStr}</span>
+    </div>
+    <div class="radar-item-name">${nombre}</div>
+    <div class="radar-item-foot">
+      <span class="radar-equipo">${d.equipo}</span>
+    </div>
+  </div>`;
+}
+
 function renderTable(subset) {
   const tbody = document.getElementById('tableBody');
   const rows = searchTerm
@@ -853,18 +2359,63 @@ function renderTable(subset) {
   }
 
   tbody.innerHTML = rows.map(d => {
-    const av = d.avance_marzo ?? d.avance_febrero ?? d.avance_enero;
-    const pct = av !== null && av !== undefined ? av : null;
-    const tagClass = d.estado==='Completado'?'completado':d.estado==='Desarrollo'?'desarrollo':d.estado==='Atrasado'?'atrasado':'noaplica';
-    const avanceHtml = pct !== null
-      ? `<div class="avance-cell">
-           <div class="mini-bar"><div class="mini-fill ${pct>=100?'green':''}" style="width:${Math.min(pct,100)}%"></div></div>
-           <span class="avance-pct">${pct}%</span>
-         </div>`
-      : `<span style="color:var(--muted);font-size:11px">Sin dato</span>`;
+    const obj = getAvanceReal(d);
+    const plan = d.cumplimiento_plan;
+    
+    // Mapear estado a clase CSS
+    const stateMap = {
+      'Completado':    'completado',
+      'En desarrollo': 'desarrollo',
+      'Atrasado':      'atrasado',
+      'Sin reporte':   'sinreporte',
+      'Planificado':   'planificado',
+    };
+    const tagClass = stateMap[d.estado] || 'planificado';
+    
+    // Ícono de riesgo de proyección
+    const riesgo = computeRiesgo(d);
+    const riesgoIcon = riesgo === 'alto'
+      ? `<span class="riesgo-icon" onmouseenter="showMiniTooltip(event,'Alto riesgo','Avance real significativamente bajo lo esperado al corte actual. Se proyecta incumplimiento si la tendencia se mantiene.')" onmouseleave="hideMiniTooltip()">⚠</span>`
+      : '';
+    
+    // Barra: Avance acumulado vs esperado
+    let avanceHtml;
+    if (obj !== null && obj !== undefined) {
+      // Calcular esperado para este desafío
+      const salud = calcularSaludDesafio(d);
+      const esperado = salud ? Math.round(salud.esperado) : null;
+      
+      // Color según delta: cyan si completado, verde si en plazo, rojo si atrasado
+      let c;
+      if (obj >= 100) {
+        c = '#00f2ff'; // cyan completado
+      } else if (esperado !== null && obj < esperado) {
+        c = '#ff5252'; // rojo atrasado
+      } else {
+        c = '#00e676'; // verde en plazo
+      }
+      
+      // Marcador del esperado
+      const markerHtml = (esperado !== null && esperado > 0 && esperado < 100)
+        ? `<div class="bar-marker" style="left:${esperado}%" onmouseenter="showMiniTooltip(event,'Esperado','${esperado}% de avance esperado para este desafío al corte actual, según su línea base de hitos.')" onmouseleave="hideMiniTooltip()"></div>`
+        : '';
+      
+      avanceHtml = `<div class="avance-cell">
+           <div class="avance-main">
+             <div class="mini-bar">
+               <div class="mini-fill" style="width:${Math.min(obj,100)}%;background:${c}"></div>
+               ${markerHtml}
+             </div>
+             <span class="avance-pct" style="color:${c}">${obj}%</span>
+           </div>
+         </div>`;
+    } else {
+      avanceHtml = `<span style="color:var(--muted);font-size:11px">Sin dato</span>`;
+    }
+    
     const comiteHtml = d.comite === 'Sí'
-      ? `<span title="Presentado en Comité" style="color:#00e676; font-size:18px; font-weight:700;">✓</span>`
-      : `<span title="No presentado en Comité" style="color:#ff5252; font-size:16px; font-weight:700; display:inline-block; width:16px; height:3px; background:#ff5252; border-radius:2px; vertical-align:middle; margin-bottom:2px;"></span>`;
+      ? `<span onmouseenter="showMiniTooltip(event,'Presentado en Comité','Este desafío fue expuesto formalmente en el Comité de Tecnología.')" onmouseleave="hideMiniTooltip()" style="color:#00e676; font-size:18px; font-weight:700; cursor:help;">✓</span>`
+      : `<span onmouseenter="showMiniTooltip(event,'No presentado en Comité','Aún no ha sido expuesto en el Comité de Tecnología.')" onmouseleave="hideMiniTooltip()" style="color:#ff5252; font-size:16px; font-weight:700; display:inline-block; width:16px; height:3px; background:#ff5252; border-radius:2px; vertical-align:middle; margin-bottom:2px; cursor:help;"></span>`;
     return `<tr>
       <td style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--muted)">${d.codigo}</td>
       <td style="max-width:320px;line-height:1.4">
@@ -873,9 +2424,9 @@ function renderTable(subset) {
           onmouseleave="hideTooltip()">${d.nombre}</span>
       </td>
       <td><span class="equipo-chip">${d.equipo}</span></td>
-      <td style="color:var(--muted)">${d.lider}</td>
-      <td><span class="tag ${tagClass}">${d.estado}</span></td>
-      <td style="min-width:120px">${avanceHtml}</td>
+      <td style="color:var(--muted);font-size:11px;white-space:nowrap;">${d.fecha_fin || "—"}</td>
+      <td><span class="tag ${tagClass}">${d.estado}</span>${riesgoIcon}</td>
+      <td style="min-width:140px">${avanceHtml}</td>
       <td style="text-align:center">${comiteHtml}</td>
     </tr>`;
   }).join('');
@@ -897,6 +2448,98 @@ function filterTable(estado) {
 // ══════════════════════════════════
 const GERENCIA_DATA_BASE = {"Plataforma y Control Tecnológico":{"total":24,"completado":4,"desarrollo":19,"noaplica":1,"atrasado":0,"avance_prom":100},"Procesos de Inversiones":{"total":4,"completado":1,"desarrollo":3,"noaplica":0,"atrasado":0,"avance_prom":100},"Gerencia de Operaciones":{"total":2,"completado":2,"desarrollo":0,"noaplica":0,"atrasado":0,"avance_prom":100}};
 
+function renderLideres(subset) {
+  const container = document.getElementById('liderPanel');
+  if (!container) return;
+  
+  // Agrupar por líder (lider está en TOOLTIP_DATA, no en DATA)
+  const lideres = {};
+  for (const d of subset) {
+    const tt = TOOLTIP_DATA[d.codigo];
+    const lider = (tt && tt.lider) ? tt.lider : 'Sin asignar';
+    if (!lideres[lider]) {
+      lideres[lider] = {
+        total:0, comp:0, des:0, atr:0, sr:0, plan:0,
+        equipos:new Set(),
+        proyectos: []
+      };
+    }
+    const L = lideres[lider];
+    L.total++;
+    L.equipos.add(d.equipo);
+    L.proyectos.push({
+      codigo: d.codigo,
+      nombre: d.nombre,
+      estado: d.estado,
+      fecha_fin: d.fecha_fin
+    });
+    if      (d.estado === 'Completado')    L.comp++;
+    else if (d.estado === 'En desarrollo') L.des++;
+    else if (d.estado === 'Atrasado')      L.atr++;
+    else if (d.estado === 'Sin reporte')   L.sr++;
+    else if (d.estado === 'Planificado')   L.plan++;
+  }
+
+  // Índice global para que los handlers de tooltip puedan consultar
+  window.LIDERES_INDEX = lideres;
+  
+  // Ordenar: alerta (atrasados o sin reporte) primero, luego por carga
+  const lista = Object.entries(lideres).map(([nombre, L]) => ({ nombre, ...L }));
+  lista.sort((a, b) => {
+    const aProb = a.atr + a.sr;
+    const bProb = b.atr + b.sr;
+    if (aProb !== bProb) return bProb - aProb;
+    return b.total - a.total;
+  });
+  
+  if (!lista.length) {
+    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Sin líderes en la vista actual</div>';
+    return;
+  }
+  
+  container.innerHTML = lista.map(L => {
+    // Cálculo de proporciones para barra apilada
+    const segs = [
+      { cls:'comp', n:L.comp },
+      { cls:'des',  n:L.des  },
+      { cls:'atr',  n:L.atr  },
+      { cls:'sr',   n:L.sr   },
+      { cls:'plan', n:L.plan },
+    ].filter(s => s.n > 0).map(s =>
+      `<div class="lider-bar-seg ${s.cls}" style="flex:${s.n}"></div>`
+    ).join('');
+    
+    const badges = [
+      L.comp > 0 ? `<span class="lider-badge comp">${L.comp} ✓</span>` : '',
+      L.des  > 0 ? `<span class="lider-badge des">${L.des} ⟳</span>` : '',
+      L.atr  > 0 ? `<span class="lider-badge atr">${L.atr} ⚠</span>` : '',
+      L.sr   > 0 ? `<span class="lider-badge sr">${L.sr} ◎</span>` : '',
+      L.plan > 0 ? `<span class="lider-badge plan">${L.plan} ◌</span>` : '',
+    ].filter(Boolean).join('');
+    
+    // Clase de alerta visual
+    let cardClass = '';
+    if (L.atr > 0) cardClass = 'alerta';
+    else if (L.sr > 0) cardClass = 'atencion';
+    
+    const equiposLista = [...L.equipos].slice(0, 3).join(' · ');
+    const masEquipos = L.equipos.size > 3 ? ` +${L.equipos.size - 3}` : '';
+    
+    return `<div class="lider-card ${cardClass}">
+      <div class="lider-head">
+        <span class="lider-nombre">${L.nombre}</span>
+        <span class="lider-total">${L.total}<span class="lider-tot-lbl">desafíos</span></span>
+      </div>
+      <div class="lider-bar"
+           onmouseenter="showLiderProjectsTooltip(event, '${L.nombre.replace(/'/g, "\\'")}', (window.LIDERES_INDEX && window.LIDERES_INDEX['${L.nombre.replace(/'/g, "\\'")}'] || {proyectos:[]}).proyectos)"
+           onmouseleave="hideLiderProjectsTooltip()"
+           style="cursor:help;">${segs}</div>
+      <div class="lider-badges">${badges}</div>
+      <div class="lider-equipos">${equiposLista}${masEquipos}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderGerencias(subset) {
   const container = document.getElementById('gerenciaScorecard');
 
@@ -907,41 +2550,74 @@ function renderGerencias(subset) {
   const gers = {};
   baseSubset.forEach(d => {
     let g = d.gerencia || 'Sin Gerencia';
-    if (!gers[g]) gers[g] = {total:0,completado:0,desarrollo:0,noaplica:0,atrasado:0,avances:[]};
+    if (!gers[g]) gers[g] = {
+      total:0, completado:0, desarrollo:0, atrasado:0, sinreporte:0, planificado:0,
+      reales:[], esperados:[]
+    };
     gers[g].total++;
-    if (d.estado==='Completado')  gers[g].completado++;
-    else if (d.estado==='Desarrollo') gers[g].desarrollo++;
-    else if (d.estado==='No aplica')  gers[g].noaplica++;
-    else if (d.estado==='Atrasado')   gers[g].atrasado++;
-    if (d.avance_total !== null) gers[g].avances.push(d.avance_total);
+    if (d.estado==='Completado')         gers[g].completado++;
+    else if (d.estado==='En desarrollo') gers[g].desarrollo++;
+    else if (d.estado==='Atrasado')      gers[g].atrasado++;
+    else if (d.estado==='Sin reporte')   gers[g].sinreporte++;
+    else if (d.estado==='Planificado')   gers[g].planificado++;
+    
+    // Modelo de hitos
+    const salud = calcularSaludDesafio(d);
+    if (salud !== null) {
+      gers[g].reales.push(salud.real);
+      gers[g].esperados.push(salud.esperado);
+    }
   });
 
   const sorted = Object.entries(gers).sort((a,b) => b[1].total - a[1].total);
 
   container.innerHTML = sorted.map(([nombre, g]) => {
-    const prom = g.avances.length ? Math.round(g.avances.reduce((a,b)=>a+b,0)/g.avances.length) : 0;
-    const pct  = Math.min(prom, 100);
-
-    // Color de salud basado en avance y atrasos
-    let healthColor, healthLabel;
-    if (g.atrasado > 0)      { healthColor = '#ff5252'; healthLabel = 'Con atrasos'; }
-    else if (pct >= 80)      { healthColor = '#00e676'; healthLabel = 'En buen ritmo'; }
-    else if (pct >= 50)      { healthColor = '#ffd600'; healthLabel = 'En progreso'; }
-    else                     { healthColor = '#8b949e'; healthLabel = 'Iniciando'; }
-
-    // Barra degradada según salud
-    const barColor = g.atrasado > 0
-      ? 'linear-gradient(90deg, #ff5252, #ff8a80)'
-      : pct >= 80
-        ? 'linear-gradient(90deg, #00f2ff, #00e676)'
-        : 'linear-gradient(90deg, #ffd600, #ffab00)';
+    const real = g.reales.length ? Math.round(g.reales.reduce((a,b)=>a+b,0)/g.reales.length) : 0;
+    const esp  = g.esperados.length ? Math.round(g.esperados.reduce((a,b)=>a+b,0)/g.esperados.length) : 0;
+    const delta = real - esp;
+    
+    // Color condicional por salud (mismas reglas que tarjeta hero)
+    let healthColor, healthClass;
+    if (real >= 100) {
+      healthColor = '#00f2ff'; healthClass = 'completo';
+    } else if (delta >= 0) {
+      healthColor = '#00e676'; healthClass = 'positivo';
+    } else if (delta >= -5) {
+      healthColor = '#ffd600'; healthClass = 'neutro';
+    } else {
+      healthColor = '#ff5252'; healthClass = 'negativo';
+    }
+    
+    // Texto contextual del estado, considerando el delta y los problemas reales
+    let healthLabel;
+    if (real >= 100) {
+      healthLabel = '✓ Cartera completada';
+    } else if (g.atrasado > 0 && delta < -5) {
+      healthLabel = `Con atrasos · ${delta} pp bajo plan`;
+    } else if (g.sinreporte > 0 && delta < -5) {
+      healthLabel = `Con problemas de reporte · ${delta} pp bajo plan`;
+    } else if (delta < -5) {
+      healthLabel = `Atrasado · ${delta} pp bajo plan`;
+    } else if (delta < 0) {
+      healthLabel = `Levemente bajo plan · ${delta} pp`;
+    } else if (delta > 5) {
+      healthLabel = `Adelantado · +${delta} pp sobre plan`;
+    } else {
+      healthLabel = 'En línea con el plan';
+    }
 
     const badges = [
-      g.completado > 0 ? `<span class="ger-badge comp">✓ ${g.completado} Completado${g.completado>1?'s':''}</span>` : '',
-      g.desarrollo > 0 ? `<span class="ger-badge dev">⟳ ${g.desarrollo} En Desarrollo</span>` : '',
-      g.atrasado   > 0 ? `<span class="ger-badge atr">⚠ ${g.atrasado} Atrasado${g.atrasado>1?'s':''}</span>` : '',
-      g.noaplica   > 0 ? `<span class="ger-badge noap">— ${g.noaplica} N/A</span>` : '',
+      g.completado  > 0 ? `<span class="ger-badge comp">✓ ${g.completado} Completado${g.completado>1?'s':''}</span>` : '',
+      g.desarrollo  > 0 ? `<span class="ger-badge dev">⟳ ${g.desarrollo} En Desarrollo</span>` : '',
+      g.atrasado    > 0 ? `<span class="ger-badge atr">⚠ ${g.atrasado} Atrasado${g.atrasado>1?'s':''}</span>` : '',
+      g.sinreporte  > 0 ? `<span class="ger-badge sr">◎ ${g.sinreporte} Sin reporte</span>` : '',
+      g.planificado > 0 ? `<span class="ger-badge noap">◌ ${g.planificado} Planificado${g.planificado>1?'s':''}</span>` : '',
     ].filter(Boolean).join('');
+    
+    // Marcador del esperado (solo si está entre 1% y 99%)
+    const markerHtml = (esp > 0 && esp < 100)
+      ? `<div class="ger-bar-marker" style="left:${esp}%" onmouseenter="showMiniTooltip(event,'Esperado','${esp}% de avance esperado para esta gerencia al corte actual.')" onmouseleave="hideMiniTooltip()"></div>`
+      : '';
 
     return `
     <div class="ger-row ${activeGerencia === nombre ? 'active' : activeGerencia ? 'dimmed' : ''}"
@@ -957,12 +2633,12 @@ function renderGerencias(subset) {
         <div class="ger-progress-label">
           <span class="ger-progress-sublabel">
             <span style="color:${healthColor}">${healthLabel}</span>
-            · Avance promedio
           </span>
-          <span class="ger-progress-pct" style="color:${healthColor}">${pct}%</span>
+          <span class="ger-progress-pct" style="color:${healthColor}">${real}%</span>
         </div>
         <div class="ger-bar-bg">
-          <div class="ger-bar-fill" style="width:${pct}%; background:${barColor}"></div>
+          <div class="ger-bar-fill" style="width:${Math.min(real,100)}%; background:${healthColor}"></div>
+          ${markerHtml}
         </div>
       </div>
       <div>
@@ -976,24 +2652,47 @@ function renderGerencias(subset) {
 // ══════════════════════════
 //  TOOLTIPS
 // ══════════════════════════
-const TOOLTIP_DATA = {"D26-20":{"descripcion":"Abordar problematicas del aumento de parches por amenazas de dia cero, clasificación y tratamiento x tipos de actualizaciones (S.O., hypervisor, app 3ros, drivers, etc).","indicador":"Proceso de parchado definido.Ahorro estimado de HH, 10HH por ejecución, 1 semestral, ahorro anual 20HH."},"D26-21":{"descripcion":"Evaluar soluciones para aumentar cobertura de virtual patch para disminuir mantenciones por procesos de parchado","indicador":"Evaluación de solución de virtual patch completada"},"D26-22":{"descripcion":"Mejorar proceso de generación de evidencias de auditorias, mediante el desarrollo de una herramienta que permita generar trazabilidad de cualquier pieza de SW","indicador":"El equipo de producción TI se ahorrara 45 HH durante el proceso de auditoria  y adicionalmente el equipo de Gestión TI ahorrara 6 HH Mensuales."},"D26-23":{"descripcion":"Validar nivel de reducción de tiempos de desarrollo por apoyo de IA para lo cual se trabajará con dos equipos de proyectos, los equipos usaran Github Copilot habitualmente y además se someterán al  desarrollo de componentes estandarizados para medir correctamente el grado de eficiencia.","indicador":"Medir el nivel de productividad que pueden alcanzar los equipos utilizando la IA como asistente versus equipos desarrollando lo mismo pero sin la IA, Confirmar mediante las métricas de Github que las sugerencias de código son al menos un 60% aceptadas"},"D26-24":{"descripcion":"Mejorar proceso actual, implementando mediciones con indicadores DORA","indicador":"Proceso implementado y primera medición en Abril de 2026"},"D26-38":{"descripcion":"Dado que comenzamos en enero la prueba piloto con copilot aproximadamente con 45 usuarios, la idea es mostrar los resultados obtenidos, aprendizajes, nivel de adopción y principales casos de uso identificados.","indicador":"• ≥70% de usuarios utilizando la herramienta\n• Identificación de al menos 2 casos de uso relevantes por equipo"},"D26-39":{"descripcion":"En base a los resultados de la prueba piloto, se busca definir la herramienta definitiva de IA a escalar, estableciendo lineamientos de uso, modelo de soporte, consideraciones de seguridad y un plan de despliegue progresivo para los equipos usuarios.","indicador":"• Herramienta de IA seleccionada y aprobada por comité\n• Lineamientos de uso, gobernanza y seguridad definidos"},"D26-150":{"descripcion":"Se compraron 2 equipos Fortigate 900G que reemplazaran los actuales 600E que ofrecen mayor potencia, que permite el ahorro de costo en equipos y licenciamiento con un ahorro aproximado de 43% por la adquisión a 5 años.","indicador":"Equipos instalados y operando en los 2 sites.\nEn vez de comprar 4 equipos de firewalls solo se requirieron 2, ahorro de 109.565.512 en 5 años."},"D26-151":{"descripcion":"Evaluar soluciones que nos ofrescan servicios similares a lo que tenemos, omnicalidad de servicios y adicionales como video llamadas como extra.","indicador":"Evaluación de solución de servicio de telefonía completada."},"D26-152":{"descripcion":"Evaluar soluciones que incluyan protección contra spam y phishing, filtrado avanzado de amenazas, cifrado de correos, continuidad del servicio, facilidad de administración y soporte profesional.","indicador":"Evaluación de solución de servicio de virtualización completada."},"D26-153":{"descripcion":"El aumento del storage es en base a una estrategia de ahorro de costo y mejoras de respaldo.","indicador":"Aumento total de capacidad de los storages en ambos sites. Presupuesto $80.682.000, ahorro estimado $35.000.000."},"D26-154":{"descripcion":"Gestionar con equipos de proyectos TI la migración de todos los procesos por lotes que habitan en Chronus 1.0 para que sean migrados a Chronus 2.0","indicador":"1. Totalidad de los job chronus movidos a Chronus 2.0.\n2. Baja de los servidores de Chronus 1.0"},"D26-155":{"descripcion":"Unificar los controles de costos de Infraestructura y TI para optimizar la gestión financiera y facilitar decisiones estratégicas.","indicador":"Disponibilizar un dashboard con una mirada estratégica de los gastos tecnológicos de la compañía."},"D26-156":{"descripcion":"Diseñar, desplegar y dejar operativa una plataforma Kubernetes basada en Linux para soportar aplicaciones cloud native de la compañía.","indicador":"Cluster Kubernetes Linux operativo en DESA, TEST y PROD\nPlataforma de persistencia NFS operativa e integrada al cluster"},"D26-157":{"descripcion":"Desplegar y configurar de manera autoalojada la herramienta GitLab para modernizar el control de versionamiento del código.","indicador":"Plataforma GitLab en producción.\nRepositorios MET en GitLab\nCapacitaciones a equipos de desarrollo"},"D26-158":{"descripcion":"Optimizar los flujos de trabajo actuales a través de la automatización de procesos críticos, minimizar la intervención manual y acelerar los tiempos de respuesta.","indicador":"Proceso de análisis de vulnerabilidades automatizado:\nCuadratura AV vs Inventario\nAnálisis de vulnerabilidades"},"D26-159":{"descripcion":"Contar con un perfilamiento web renovado que reduzca la labor operativa de los actuales perfiles, pensando en la productividad y la seguridad.","indicador":"Perfilamiento web oficializado, ahorro estimado de 4 HH mensuales, ahorro anual 48HH."},"D26-160":{"descripcion":"Abordar la crisis del incremento de costos de la virtualización, definiendo la solución más adecuada para la compañía.","indicador":"Definir nueva solución"},"D26-161":{"descripcion":"Plan coordinado con equipo de Desarrollo para migración de motores de BD.","indicador":"Migrar motores de BD SQL Server a SQL2022"},"D26-162":{"descripcion":"Analizar y optimizar políticas de respaldos de bases de datos, servidores virtuales y File Servers, con el fin de disminuir la utilización del almacenamiento.","indicador":"Evaluar solución a un costo similar al de la actual (aprox US$260.000 + iva)"},"D26-163":{"descripcion":"Continuar desde plan Avanza, en proceso de definición de reemplazar el HW adquirido por otra marca.","indicador":"Equipos Core de comunicaciones implementados."},"D26-164":{"descripcion":"Implementar respaldos de bases de datos SQL Server con la herramienta Veeam Backup, reemplazando la herramienta existente Idera.","indicador":"Consolidar una plataforma para respaldo de bases de datos SQL Server."},"D26-165":{"descripcion":"Implementar respaldos de bases de datos PostgreSQL con la herramienta Veeam Backup. Actualmente los respaldos se hacen de forma nativa.","indicador":"Utilizar la herramienta actual Veeam Backup para respaldar las bases de datos PostgreSQL."},"D26-166":{"descripcion":"Necesidad de tener un servidor de base de datos PostgreSQL destinado a alojar bases de datos internas de la compañía, separadas de las bases de negocio.","indicador":"Definir y configurar servidor PostgreSQL destinado a hospedar bases de datos internas de Pentavida."},"D26-167":{"descripcion":"Administrar las claves de administrador de equipos a través de herramienta LAPS, de forma centralizada y segura.","indicador":"Administración de claves centralizada desde servidor"},"D26-168":{"descripcion":"Implementar interface de autoconsulta de inventarios.","indicador":"Reducción de HH por concepto de generación de informes"},"D26-169":{"descripcion":"Implementar parchado de drivers via Patch Manager.","indicador":"Reducción de HH por concepto de actualizaciones manuales"},"D26-170":{"descripcion":"Evaluar herramientas con prestaciones similares que ayuden a migrar de la solución actual con costos cada vez más restrictivos.","indicador":"Evaluación de solución de servicio de virtualización completada."},"D26-171":{"descripcion":"Diseño, implementación y despliegue de nuevo Gestor Documental para reemplazar progresivamente Alfresco.","indicador":"1. Habilitación productiva de la nueva plataforma.\n2. Guía de proceso de migración para Sistemas integrados a Alfresco."},"D26-172":{"descripcion":"Diseño, implementación y despliegue de nuevo gestor de captchas en la compañía.","indicador":"1. Habilitación productiva de la nueva plataforma.\n2. Guía de proceso de migración para Sistemas integrados a Cloudflare Turnstile o Google Recaptcha."}};
 
 const tooltipBox        = document.getElementById('tooltipBox');
+const tooltipLider      = document.getElementById('tooltipLider');
 const tooltipDesc       = document.getElementById('tooltipDesc');
 const tooltipIndicador  = document.getElementById('tooltipIndicador');
+const tooltipHitos      = document.getElementById('tooltipHitos');
 let tooltipTimeout;
 
 function showTooltip(e, codigo) {
   const data = TOOLTIP_DATA[codigo];
   if (!data) return;
+  tooltipLider.textContent     = data.lider       || '—';
   tooltipDesc.textContent      = data.descripcion || '—';
   tooltipIndicador.textContent = data.indicador   || '—';
+  const hitos = data.hitos || [];
+  if (hitos.length === 0) {
+    tooltipHitos.innerHTML = '<div style="color:#8b949e;font-style:italic;font-size:11px;">Sin hitos registrados</div>';
+  } else {
+    tooltipHitos.innerHTML = hitos.map(h => {
+      const av = h.avance;
+      let color = '#8b949e', badge = '—';
+      if (av !== null && av !== undefined) {
+        if (av >= 100)     color = '#00f2ff';
+        else if (av >= 76) color = '#00e676';
+        else if (av >= 40) color = '#ffd600';
+        else               color = '#ff5252';
+        badge = av + '%';
+      }
+      return `<div class="tooltip-hito">
+        <span class="tooltip-hito-mes">${h.mes}</span>
+        <span class="tooltip-hito-act">${h.actividad}</span>
+        <span class="tooltip-hito-av" style="color:${color};border-color:${color};">${badge}</span>
+      </div>`;
+    }).join('');
+  }
   positionTooltip(e);
   tooltipBox.classList.add('visible');
 }
 
 function positionTooltip(e) {
-  const TW = 340, TH = 180, PAD = 12;
+  const TW = 380, TH = 360, PAD = 12;
   let x = e.clientX + PAD;
   let y = e.clientY + PAD;
   if (x + TW > window.innerWidth  - PAD) x = e.clientX - TW - PAD;
@@ -1006,12 +2705,112 @@ function hideTooltip() {
   tooltipBox.classList.remove('visible');
 }
 
+// ── Tooltip Mini (microcontextos) ──
+const tooltipMini       = document.getElementById('tooltipMini');
+const tooltipMiniTitle  = document.getElementById('tooltipMiniTitle');
+const tooltipMiniBody   = document.getElementById('tooltipMiniBody');
+
+function showMiniTooltip(e, title, body) {
+  // Excluyentes: mini no convive con rich
+  tooltipProjects.classList.remove('visible');
+  tooltipMiniTitle.textContent = title || '';
+  tooltipMiniBody.innerHTML    = body  || '';
+  tooltipMiniTitle.style.display = title ? '' : 'none';
+  positionMiniTooltip(e);
+  tooltipMini.classList.add('visible');
+}
+
+function hideMiniTooltip() {
+  tooltipMini.classList.remove('visible');
+}
+
+function positionMiniTooltip(e) {
+  const PAD = 12;
+  // Medir tamaño real para evitar desbordes
+  const rect = tooltipMini.getBoundingClientRect();
+  const tw = rect.width  || 240;
+  const th = rect.height || 60;
+  let x = e.clientX + PAD;
+  let y = e.clientY + PAD;
+  if (x + tw > window.innerWidth  - PAD) x = e.clientX - tw - PAD;
+  if (y + th > window.innerHeight - PAD) y = e.clientY - th - PAD;
+  tooltipMini.style.left = x + 'px';
+  tooltipMini.style.top  = y + 'px';
+}
+
+// ── Tooltip rico — Proyectos por Líder ──
+const tooltipProjects        = document.getElementById('tooltipProjects');
+const tooltipProjectsLider   = document.getElementById('tooltipProjectsLider');
+const tooltipProjectsList    = document.getElementById('tooltipProjectsList');
+const tooltipProjectsLabel   = document.getElementById('tooltipProjectsLabel');
+
+const ESTADO_BADGE_MAP = {
+  'Completado'   : { cls: 'comp', label: 'Completado'   },
+  'En desarrollo': { cls: 'des',  label: 'En desarrollo'},
+  'Atrasado'     : { cls: 'atr',  label: 'Atrasado'     },
+  'Sin reporte'  : { cls: 'sr',   label: 'Sin reporte'  },
+  'Planificado'  : { cls: 'plan', label: 'Planificado'  },
+};
+
+function showLiderProjectsTooltip(e, liderNombre, proyectos) {
+  if (!proyectos || !proyectos.length) return;
+  // Excluyentes: rich no convive con mini
+  tooltipMini.classList.remove('visible');
+
+  // Orden visual: atrasados → sin reporte → en desarrollo → completados → planificados
+  const orden = { 'Atrasado':0, 'Sin reporte':1, 'En desarrollo':2, 'Completado':3, 'Planificado':4 };
+  const lista = [...proyectos].sort((a,b) => (orden[a.estado] ?? 99) - (orden[b.estado] ?? 99));
+
+  tooltipProjectsLabel.textContent = `Carga · ${proyectos.length} desafío${proyectos.length===1?'':'s'}`;
+  tooltipProjectsLider.textContent = liderNombre;
+
+  tooltipProjectsList.innerHTML = lista.map(p => {
+    const meta  = ESTADO_BADGE_MAP[p.estado] || { cls:'plan', label: p.estado || '—' };
+    const fecha = p.fecha_fin || '—';
+    return `<div class="tooltip-project-row">
+      <span class="tooltip-project-cod">${p.codigo}</span>
+      <div class="tooltip-project-mid">
+        <span class="tooltip-project-name">${p.nombre || '—'}</span>
+        <span class="tooltip-project-fecha">Fin · ${fecha}</span>
+      </div>
+      <span class="tooltip-project-badge ${meta.cls}">${meta.label}</span>
+    </div>`;
+  }).join('');
+
+  positionProjectsTooltip(e);
+  tooltipProjects.classList.add('visible');
+}
+
+function hideLiderProjectsTooltip() {
+  tooltipProjects.classList.remove('visible');
+}
+
+function positionProjectsTooltip(e) {
+  const PAD = 12;
+  const rect = tooltipProjects.getBoundingClientRect();
+  const tw = rect.width  || 380;
+  const th = rect.height || 320;
+  let x = e.clientX + PAD;
+  let y = e.clientY + PAD;
+  if (x + tw > window.innerWidth  - PAD) x = e.clientX - tw - PAD;
+  if (y + th > window.innerHeight - PAD) y = e.clientY - th - PAD;
+  tooltipProjects.style.left = x + 'px';
+  tooltipProjects.style.top  = y + 'px';
+}
+
 document.addEventListener('mousemove', e => {
   if (tooltipBox.classList.contains('visible')) positionTooltip(e);
+});
+document.addEventListener('mousemove', e => {
+  if (tooltipMini.classList.contains('visible')) positionMiniTooltip(e);
+});
+document.addEventListener('mousemove', e => {
+  if (tooltipProjects.classList.contains('visible')) positionProjectsTooltip(e);
 });
 
 // ── Init — esperar fuentes antes de renderizar ──
 document.fonts.ready.then(() => {
+  inicializarSelectorCorte();
   refreshAll();
 });
 </script>
